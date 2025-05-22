@@ -1,0 +1,27 @@
+@use '../../../styles/variables' as *;
+
+.button {
+    outline: none;
+    cursor: pointer;
+
+    padding: 10px 16px;
+
+    font-size: 14px;
+    font-weight: 300;
+
+    border-radius: 10px;
+    border: none;
+
+    background-color: $primary-color;
+    color: white;
+    transition: background-color 0.3s;
+
+    &:hover {
+        background-color: $secondary-color;
+    }
+
+    &:disabled {
+        opacity: .5;
+        pointer-events: none;
+    }
+}
