@@ -14,8 +14,8 @@ I decided to carry out a structural refactoring of the application to improve sc
 
 ### Transition to feature-based structural organization:
 
-- Components and logic are grouped by features.
-- Large components are divided into subcomponents.
+- Components (TrackList, GenreSelect, Modal, Audio) and logic are grouped by features.
+- Large components (Track, TrackControls) are divided into subcomponents.
 
 ### Transition to Redux Toolkit 2.0 syntax:
 
