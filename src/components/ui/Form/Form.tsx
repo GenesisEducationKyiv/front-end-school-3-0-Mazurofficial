@@ -15,6 +15,8 @@ import type {
    TrackIdT,
    UpdateTrackDtoT,
 } from '../../../features/trackList/zod_schemas';
+import { trackFormSchema } from './zod_schema';
+import { z } from 'zod';
 
 export type FormProps = {
    id?: TrackIdT;
@@ -30,33 +32,21 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
 
    // Form validation function
    const validate = () => {
-      const newErrors: Record<string, string> = {};
-
-      if (!formData.title.trim()) {
-         newErrors.title = 'Title is required';
-      } else if (formData.title.length > 30) {
-         newErrors.title = 'Title must be less than 30 characters';
-      }
-
-      if (!formData.artist.trim()) {
-         newErrors.artist = 'Artist is required';
-      } else if (formData.artist.length > 30) {
-         newErrors.artist = 'Artist must be less than 30 characters';
-      }
-
-      if (formData.album && formData.album.length > 30) {
-         newErrors.album = 'Album must be less than 30 characters';
-      }
-
-      if (formData.coverImage?.trim()) {
-         const urlRegex = /^(https?:\/\/.*\.(?:png|jpg|jpeg|gif|webp))$/i;
-         if (!urlRegex.test(formData.coverImage)) {
-            newErrors.coverImage = 'Invalid image URL format';
+      try {
+         trackFormSchema.parse(formData);
+         setErrors({});
+         return true;
+      } catch (error) {
+         if (error instanceof z.ZodError) {
+            const newErrors: Record<string, string> = {};
+            error.errors.forEach((err) => {
+               const path = err.path.join('.');
+               newErrors[path] = err.message;
+            });
+            setErrors(newErrors);
          }
+         return false;
       }
-
-      setErrors(newErrors);
-      return Object.keys(newErrors).length === 0;
    };
 
    // onChange for text inputs
