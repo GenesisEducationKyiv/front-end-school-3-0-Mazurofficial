@@ -1,4 +1,4 @@
-# ADR 01: Refactoring project structure to improve Scalability and Maintainability
+# ADR 001: Refactoring project structure to improve Scalability and Maintainability
 
 ## Context
 
@@ -10,27 +10,44 @@ In case of further development of the project as a full-fledged application, cri
 
 ## Decision
 
-I decided to carry out a structural refactoring of the application to improve scalability and maintainability. This includes:
+Restructure the application to follow a **feature-based modular organization**. This includes:
 
-### Transition to feature-based structural organization:
+### Grouping components and business logic by features.
 
-- Components (TrackList, GenreSelect, Modal, Audio) and logic are grouped by features.
-- Large components (Track, TrackControls) are divided into subcomponents.
+This migration targets components that are **tightly coupled with specific features and contain business logic** (e.g. use `Redux state`, `dispatch` actions, contain feature-specific logic). These components will be moved from `src/components/` into a corresponding `src/features/<feature>/components/` directory. Steps:
 
-### Transition to Redux Toolkit 2.0 syntax:
+1. **Audit and classify components in** `src/components/`
+   - Tag each component as either:
+      - **Feature-specific** (with business logic) — e.g., `TrackList`, `GenreSelect`, `Audio`, etc.
+      - **Generic/presentational** — e.g., buttons, modal wrappers, input fields.
+2. **Create feature folders under** `src/features/`
+   - For each identified feature (e.g., `trackList`, `genres`, `audio`), create a directory:
+     `src/features/trackList/components/`
+     `src/features/genres/components/`
+3. **Move only feature components**
+   - Relocate components tied to a specific feature and containing business logic to the corresponding features folder.
+   - Update all related imports.
+4. **Refactor and test iteratively**
+   - After each move, confirm that features still function correctly and no broken imports exist.
 
-- Using the new API to define reducers (including asynchronous ones) in `createSlice`.
-- Centralized storage of all reducers within a single slice file.
-- Abandoning `createAsyncThunk` in favor of integrating asynchronous reducers directly into `createSlice`.
+### Completion criteria
+
+The migration is considered complete when:
+
+- All feature-specific components with business logic have been moved to `src/features/<feature>/components/`.
+- `src/components/` only contains:
+   - Generic, reusable UI components.
+   - Presentational components with no dependency on application logic or feature state.
+- All moved components have updated and working import paths.
+- New feature-specific components are placed under the appropriate `src/features/` folder by default.
 
 ---
 
 ## Rationale
 
-- **Scalability**: the new structure enables more efficient project scaling without chaotic growth of dependencies.
-- **Maintainability**: centralization of logic in one place makes the code less scattered and easier to support.
-- **Consistency**: using modern RTK 2.0 syntax standardizes the approach to writing state logic.
-- **Best practices**: feature-based structure and the new RTK syntax are recommended approaches in modern SPAs.
+- **Scalability**: Feature-based architecture allows each module to evolve independently, enabling easier integration of new features without cluttering global space.
+- **Maintainability**: Keeping related code (logic, UI, tests) together makes it easier to debug and modify specific features.
+- **Best Practices**: This approach aligns with modern recommendations for single-page application architecture.
 
 ---
 
@@ -45,14 +62,10 @@ I decided to carry out a structural refactoring of the application to improve sc
 ### Positive:
 
 - **Improved scalability:** the structure makes it easier to add new features.
-- **Single point of state logic management:** all reducers — including asynchronous — are stored in slice files.
-- **Better testability:** smaller independent parts of the code are easier to test.
-- **Less boilerplate:** the new RTK 2.0 syntax reduces the amount of template code.
+- **Improved separation of concerns:** logic, UI, and state management are grouped by feature, resulting in clearer responsibilities and cleaner code.
 - **Better onboarding for new developers:в** consistent approach across all parts of the project.
 
 ### Negative:
 
 - **Increased structural complexity:** new levels of abstraction may initially complicate understanding of the project.
 - **Time for refactoring:** significant time must be allocated to restructuring logic and architecture.
-- **Larger slice files:** centralization of all reducers may reduce readability.
-- **Need to learn RTK 2.0:** time is required to adapt to the new paradigm, which may slow down development at the initial stage.
