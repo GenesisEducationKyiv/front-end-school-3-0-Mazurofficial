@@ -1,5 +1,5 @@
-import type { RootState } from '../../app/store';
-import type { TrackIdT } from './zod_schemas';
+import type { RootState } from '@/app/store';
+import type { TrackIdT } from './schema';
 
 // Select all tracks
 export const selectAllTrackList = (state: RootState) => state.tracks.list;

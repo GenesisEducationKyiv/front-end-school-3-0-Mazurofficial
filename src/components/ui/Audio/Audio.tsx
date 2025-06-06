@@ -3,23 +3,20 @@ import { useRef, useEffect, useState } from 'react';
 import {
    selectAllTrackList,
    selectTrackById,
-} from '../../../features/trackList/trackListSelectors';
+} from '@/features/trackList/trackListSelectors';
 import {
    playTrack,
    saveTrackProgress,
    stopTrack,
-} from '../../../features/audio/audioSlice';
+} from '@/features/audio/audioSlice';
 import {
    selectPlayingTrackId,
    selectTrackProgress,
-} from '../../../features/audio/audioSelectors';
-import { getAudioFile } from '../../../api/api';
+} from '@/features/audio/audioSelectors';
+import { getAudioFile } from '@/api/api';
 import Button from '../Button/Button';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import type {
-   TrackIdT,
-   TrackListT,
-} from '../../../features/trackList/zod_schemas';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import type { TrackIdT, TrackListT } from '@/features/trackList/schema';
 
 export type AudioProps = {
    id: TrackIdT;

@@ -1,21 +1,18 @@
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectAllGenres } from '../../../features/genres/trackListSelectors';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { selectAllGenres } from '@/features/genres/trackListSelectors';
 import styles from './Form.module.scss';
 import Input from '../Input/Input';
 import GenreSelect from '../../GenreSelect/GenreSelect';
 import Button from '../Button/Button';
-import {
-   addTrack,
-   editTrack,
-} from '../../../features/trackList/trackListApiSlice';
-import { closeModal } from '../../../features/modalWindow/modalWindowSlice';
+import { addTrack, editTrack } from '@/features/trackList/trackListApiSlice';
+import { closeModal } from '@/features/modalWindow/modalWindowSlice';
 import type {
    CreateTrackDtoT,
    TrackIdT,
    UpdateTrackDtoT,
-} from '../../../features/trackList/zod_schemas';
-import { trackFormSchema } from './zod_schema';
+} from '@/features/trackList/schema';
+import { trackFormSchema } from './schema';
 import { z } from 'zod';
 
 export type FormProps = {

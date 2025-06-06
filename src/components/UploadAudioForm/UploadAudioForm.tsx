@@ -1,14 +1,14 @@
 import styles from './UploadAudioForm.module.scss';
 import { useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
    deleteTrackFile,
    uploadTrackFile,
-} from '../../features/trackList/trackListApiSlice';
-import { selectTrackById } from '../../features/trackList/trackListSelectors';
-import Button from '../ui/Button/Button';
-import { getAudioFile } from '../../api/api';
-import type { TrackIdT } from '../../features/trackList/zod_schemas';
+} from '@/features/trackList/trackListApiSlice';
+import { selectTrackById } from '@/features/trackList/trackListSelectors';
+import Button from '@/components/ui/Button/Button';
+import { getAudioFile } from '@/api/api';
+import type { TrackIdT } from '@/features/trackList/schema';
 
 export type UploadAudioFormProps = {
    id: TrackIdT;

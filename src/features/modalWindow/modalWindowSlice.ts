@@ -1,6 +1,6 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
-import type { TrackIdT } from '../trackList/zod_schemas';
+import type { TrackIdT } from '../trackList/schema';
 
 type modalState = {
    isVisible: boolean;

@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { useAppDispatch } from '../../app/hooks';
+import { useAppDispatch } from '@/app/hooks';
 import { loadTracks } from './trackListApiSlice';
 
 export const useInitialTrackList = () => {

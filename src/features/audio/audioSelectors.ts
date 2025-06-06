@@ -1,5 +1,5 @@
-import type { RootState } from '../../app/store';
-import type { TrackIdT } from '../trackList/zod_schemas';
+import type { RootState } from '@/app/store';
+import type { TrackIdT } from '../trackList/schema';
 
 // Current playing track ID
 export const selectPlayingTrackId = (state: RootState) =>

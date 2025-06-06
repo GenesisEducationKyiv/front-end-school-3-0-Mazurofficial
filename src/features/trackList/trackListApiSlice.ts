@@ -1,7 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
-import type { ExtraType } from '../../types/extra';
-import type { Status } from '../../types/status';
+import type { ExtraType } from '@/types/extra';
+import type { Status } from '@/types/status';
 import {
    type MetaT,
    type TrackListT,
@@ -13,56 +13,40 @@ import {
    type DeleteTracksBulkReturnT,
    loadTracksSchema,
    trackSchema,
-   trackIdSchema,
    deleteTracksBulkSchema,
-} from './zod_schemas';
+} from './schema';
+import { safeApiCall } from '../../utils/safeApiCall';
 
 // Loads a list of tracks from the API with support for pagination, sorting, searching, and filtering by genre.
 export const loadTracks = createAsyncThunk<
-   {
-      data: {
-         data: TrackListT;
-         meta: MetaT;
-      };
-   },
+   { data: { data: TrackListT; meta: MetaT } },
    TrackQueryT,
-   {
-      extra: ExtraType;
-      rejectValue: string;
-   }
+   { extra: ExtraType; rejectValue: string }
 >(
    'tracks/load-tracks',
    async (params, { extra: { client, api }, rejectWithValue }) => {
       const queryParams = new URLSearchParams();
 
-      if (params.limit) queryParams.append('limit', params.limit.toString());
-      if (params.page) queryParams.append('page', params.page.toString());
-      if (params.sort) queryParams.append('sort', params.sort);
-      if (params.order) queryParams.append('order', params.order);
-      if (params.search) queryParams.append('search', params.search);
-      if (params.genre) queryParams.append('genre', params.genre);
+      Object.entries(params).forEach(([param, paramValue]) => {
+         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+         if (paramValue !== undefined && paramValue !== null)
+            queryParams.append(param, paramValue.toString());
+      });
 
-      const queryString = queryParams.toString();
-      const url = `${api.ALL_TRACKS}?${queryString}`;
+      const url = `${api.ALL_TRACKS}?${queryParams.toString()}`;
 
-      try {
-         const result = await client.get(url);
-         const parseResult = loadTracksSchema.safeParse(result.data); // Validate response using Zod
-         if (!parseResult.success) {
-            return rejectWithValue('Invalid TrackList Type from server');
-         }
-         return { data: parseResult.data };
-      } catch (error) {
-         if (error instanceof Error) return rejectWithValue(error.message);
-         return rejectWithValue('Unknown error');
-      }
+      const result = await safeApiCall(() => client.get(url), loadTracksSchema);
+
+      if (result.isErr()) return rejectWithValue(result.error);
+
+      return { data: result.value };
    }
 );
 
 // Sends a new track to the API to be added to the database and returns the created track.
 export const addTrack = createAsyncThunk<
-   TrackT, // return
-   CreateTrackDtoT, // input
+   TrackT,
+   CreateTrackDtoT,
    {
       extra: ExtraType;
       rejectValue: string;
@@ -70,71 +54,52 @@ export const addTrack = createAsyncThunk<
 >(
    'tracks/add-track',
    async (newTrack, { extra: { client, api }, rejectWithValue }) => {
-      try {
-         const result = await client.post<TrackT>(api.createNewTrack, newTrack);
-         const parseResult = trackSchema.safeParse(result.data); // Validate response using Zod
-         if (!parseResult.success) {
-            return rejectWithValue('Invalid Track Type from server');
-         }
-         return parseResult.data;
-      } catch (error) {
-         if (error instanceof Error) return rejectWithValue(error.message);
-         return rejectWithValue('Unknown error');
-      }
+      const result = await safeApiCall<TrackT>(
+         () => client.post(api.createNewTrack, newTrack),
+         trackSchema
+      );
+      if (result.isErr()) return rejectWithValue(result.error);
+
+      return result.value;
    }
 );
 
 // Sends updated track data to the API and returns the updated track from the server.
 export const editTrack = createAsyncThunk<
-   TrackT, // returned updated track
-   UpdateTrackDtoT, // input: edited track
-   {
-      extra: ExtraType;
-      rejectValue: string;
-   }
+   TrackT,
+   UpdateTrackDtoT,
+   { extra: ExtraType; rejectValue: string }
 >(
    'tracks/edit-track',
    async (updatedTrack, { extra: { client, api }, rejectWithValue }) => {
       const { id, ...newMeta } = updatedTrack;
-      try {
-         const result = await client.put<TrackT>(
-            api.updateTrackById(id),
-            newMeta
-         );
-         const parseResult = trackSchema.safeParse(result.data); // Validate response using Zod
-         if (!parseResult.success) {
-            return rejectWithValue('Invalid Track Type from server');
-         }
-         return parseResult.data;
-      } catch (error) {
-         if (error instanceof Error) return rejectWithValue(error.message);
-         return rejectWithValue('Unknown error');
-      }
+
+      const result = await safeApiCall(
+         () => client.put(api.updateTrackById(id), newMeta),
+         trackSchema
+      );
+
+      if (result.isErr()) return rejectWithValue(result.error);
+
+      return result.value;
    }
 );
 
-// Sends a delete request to the API for a specific track ID and returns the deleted ID if successful.
+// Deletes track by Id
 export const deleteTrack = createAsyncThunk<
-   TrackIdT, // return
-   TrackIdT, // input
-   {
-      extra: ExtraType;
-      rejectValue: string;
-   }
+   TrackIdT,
+   TrackIdT,
+   { extra: ExtraType; rejectValue: string }
 >(
    'tracks/delete-track',
    async (trackId, { extra: { client, api }, rejectWithValue }) => {
-      try {
-         const result = await client.delete(api.deleteTrackById(trackId));
-         const parseResult = trackIdSchema.safeParse(result.data);
-         if (!parseResult.success) {
-            return rejectWithValue('Invalid ID Type from server');
-         }
-         return parseResult.data;
-      } catch (error) {
-         if (error instanceof Error) return rejectWithValue(error.message);
-         return rejectWithValue('Unknown error');
-      }
+      const result = await safeApiCall(() =>
+         client.delete(api.deleteTrackById(trackId))
+      );
+
+      if (result.isErr()) return rejectWithValue(result.error);
+
+      return trackId;
    }
 );
 
@@ -145,8 +110,8 @@ export type UploadTrackFileParams = {
 
 // Uploads an audio file for a specific track using multipart/form-data and returns the updated track data.
 export const uploadTrackFile = createAsyncThunk<
-   TrackT, // return
-   UploadTrackFileParams, // input
+   TrackT,
+   UploadTrackFileParams,
    {
       extra: ExtraType;
       rejectValue: string;
@@ -154,26 +119,20 @@ export const uploadTrackFile = createAsyncThunk<
 >(
    'tracks/upload-file',
    async ({ id, file }, { extra: { client, api }, rejectWithValue }) => {
-      try {
-         const formData = new FormData();
-         formData.append('file', file);
+      const formData = new FormData();
+      formData.append('file', file);
 
-         const result = await client.post(
-            api.uploadAudioToTrackById(id),
-            formData,
-            {
+      const result = await safeApiCall<TrackT>(
+         () =>
+            client.post(api.uploadAudioToTrackById(id), formData, {
                headers: { 'Content-Type': 'multipart/form-data' },
-            }
-         );
-         const parseResult = trackSchema.safeParse(result.data); // Validate response using Zod
-         if (!parseResult.success) {
-            return rejectWithValue('Invalid Track Type from server');
-         }
-         return parseResult.data;
-      } catch (error) {
-         if (error instanceof Error) return rejectWithValue(error.message);
-         return rejectWithValue('Unknown error');
-      }
+            }),
+         trackSchema
+      );
+
+      if (result.isErr()) return rejectWithValue(result.error);
+
+      return result.value;
    }
 );
 
@@ -188,28 +147,21 @@ export const deleteTrackFile = createAsyncThunk<
 >(
    'tracks/delete-track-file',
    async (trackId, { extra: { client, api }, rejectWithValue }) => {
-      try {
-         const result = await client.delete<TrackT>(
-            api.deleteAudioToTrackById(trackId)
-         );
-         const parseResult = trackSchema.safeParse(result.data); // Validate response using Zod
-         if (!parseResult.success) {
-            return rejectWithValue('Invalid Track Type from server');
-         }
-         return parseResult.data;
-      } catch (error) {
-         if (error instanceof Error) return rejectWithValue(error.message);
-         return rejectWithValue('Unknown error');
-      }
+      const result = await safeApiCall<TrackT>(
+         () => client.delete(api.deleteAudioToTrackById(trackId)),
+         trackSchema
+      );
+
+      if (result.isErr()) return rejectWithValue(result.error);
+
+      return result.value;
    }
 );
 
 // MultiDeletes selected audio files associated with a specific tracks and returns the IDs of succesfully deleted tracks
 export const deleteTracksBulk = createAsyncThunk<
-   DeleteTracksBulkReturnT, // return
-   {
-      ids: TrackIdT[];
-   }, // input
+   DeleteTracksBulkReturnT,
+   { ids: TrackIdT[] },
    {
       extra: ExtraType;
       rejectValue: string;
@@ -217,20 +169,14 @@ export const deleteTracksBulk = createAsyncThunk<
 >(
    'tracks/delete-tracks-bulk',
    async (tracksToDelete, { extra: { client, api }, rejectWithValue }) => {
-      try {
-         const result = await client.post(
-            api.deleteMultipleTracks,
-            tracksToDelete
-         );
-         const parseResult = deleteTracksBulkSchema.safeParse(result.data); // Validate response using Zod
-         if (!parseResult.success) {
-            return rejectWithValue('Invalid Track Type from server');
-         }
-         return parseResult.data;
-      } catch (error) {
-         if (error instanceof Error) return rejectWithValue(error.message);
-         return rejectWithValue('Unknown error');
-      }
+      const result = await safeApiCall<DeleteTracksBulkReturnT>(
+         () => client.post(api.deleteMultipleTracks, tracksToDelete),
+         deleteTracksBulkSchema
+      );
+
+      if (result.isErr()) return rejectWithValue(result.error);
+
+      return result.value;
    }
 );
 
@@ -299,9 +245,13 @@ export const trackListSlice = createSlice({
          state.bulkDeleteMode = !state.bulkDeleteMode;
          state.selectedTrackIds = [];
       },
-      // Select track to bulk delete
-      selectTrack: (state, action: PayloadAction<string>) => {
-         if (!state.selectedTrackIds.includes(action.payload)) {
+      // Select/unselect track to bulk delete
+      toggleTrack: (state, action: PayloadAction<string>) => {
+         if (state.selectedTrackIds.includes(action.payload)) {
+            state.selectedTrackIds = state.selectedTrackIds.filter(
+               (id) => id !== action.payload
+            );
+         } else {
             state.selectedTrackIds.push(action.payload);
          }
       },
@@ -315,12 +265,6 @@ export const trackListSlice = createSlice({
             )
                state.selectedTrackIds.push(track.id);
          });
-      },
-      // Unselect track from deleting list
-      unselectTrack: (state, action: PayloadAction<string>) => {
-         state.selectedTrackIds = state.selectedTrackIds.filter(
-            (id) => id !== action.payload
-         );
       },
       // Unselect all tracks from deleting list
       clearSelectedTracks: (state) => {
@@ -437,8 +381,7 @@ export const {
    setSorting,
    setSearch,
    toggleBulkDeleteMode,
-   selectTrack,
    selectAllTracks,
-   unselectTrack,
+   toggleTrack,
    clearSelectedTracks,
 } = trackListSlice.actions;

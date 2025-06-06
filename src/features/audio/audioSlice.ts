@@ -1,5 +1,5 @@
 import { createSlice, type PayloadAction } from '@reduxjs/toolkit';
-import type { TrackIdT } from '../trackList/zod_schemas';
+import type { TrackIdT } from '../trackList/schema';
 
 type TrackProgress = {
    id: TrackIdT;

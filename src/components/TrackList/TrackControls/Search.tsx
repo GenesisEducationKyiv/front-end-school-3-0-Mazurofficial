@@ -1,16 +1,13 @@
 import styles from './TrackControls.module.scss';
 import type { ChangeEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
    selectTrackListMeta,
    selectTrackListQuery,
-} from '../../../features/trackList/trackListSelectors';
-import {
-   loadTracks,
-   setSearch,
-} from '../../../features/trackList/trackListApiSlice';
-import Input from '../../ui/Input/Input';
+} from '@/features/trackList/trackListSelectors';
+import { loadTracks, setSearch } from '@/features/trackList/trackListApiSlice';
+import Input from '@/components/ui/Input/Input';
 
 export default function Search() {
    const dispatch = useAppDispatch();

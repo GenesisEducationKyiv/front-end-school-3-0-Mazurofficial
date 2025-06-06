@@ -1,7 +1,7 @@
-import { useAppSelector } from '../../app/hooks';
-import { selectTrackById } from '../../features/trackList/trackListSelectors';
-import type { UpdateTrackDtoT } from '../../features/trackList/zod_schemas';
-import Form from '../ui/Form/Form';
+import { useAppSelector } from '@/app/hooks';
+import { selectTrackById } from '@/features/trackList/trackListSelectors';
+import type { UpdateTrackDtoT } from '@/features/trackList/schema';
+import Form from '@/components/ui/Form/Form';
 
 export type EditTrackFormProps = {
    id: UpdateTrackDtoT['id'];

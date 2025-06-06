@@ -1,6 +1,6 @@
-import { useAppSelector } from '../../../../../app/hooks';
-import { selectTrackById } from '../../../../../features/trackList/trackListSelectors';
-import type { TrackIdT } from '../../../../../features/trackList/zod_schemas';
+import { useAppSelector } from '@/app/hooks';
+import { selectTrackById } from '@/features/trackList/trackListSelectors';
+import type { TrackIdT } from '@/features/trackList/schema';
 import Genre from './Genre';
 import styles from './Trackgenres.module.scss';
 

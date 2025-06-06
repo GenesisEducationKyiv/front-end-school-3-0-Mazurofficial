@@ -1,8 +1,8 @@
 import styles from './TrackBtns.module.scss';
-import { useAppDispatch } from '../../../../../app/hooks';
-import { deleteTrack } from '../../../../../features/trackList/trackListApiSlice';
-import type { TrackIdT } from '../../../../../features/trackList/zod_schemas';
-import Button from '../../../../ui/Button/Button';
+import { useAppDispatch } from '@/app/hooks';
+import { deleteTrack } from '@/features/trackList/trackListApiSlice';
+import type { TrackIdT } from '@/features/trackList/schema';
+import Button from '@/components/ui/Button/Button';
 
 type DeleteTrackBtnProps = {
    id: TrackIdT;
@@ -12,19 +12,9 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
    const dispatch = useAppDispatch();
 
    // Delete track by id
-   const handleDeleteTrack = async (id: string) => {
-      const result = await dispatch(deleteTrack(id));
-      if (deleteTrack.fulfilled.match(result)) {
-         console.log('Track deleted successfully');
-      } else {
-         console.error('Delete failed:', result.payload);
-      }
-   };
-
-   // Open dialog window with deleting acceptance
-   const handleDeleteClick = (id: string) => {
+   const handleDeleteTrack = (id: string) => {
       if (window.confirm('Are you sure you want to delete this track?')) {
-         void handleDeleteTrack(id);
+         void dispatch(deleteTrack(id));
       }
    };
 
@@ -32,7 +22,7 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
       <Button
          className={`${styles.iconButton} ${styles.deleteButton}`}
          onClick={() => {
-            handleDeleteClick(id);
+            handleDeleteTrack(id);
          }}
          title="Delete track"
          data-testid={`delete-track-${id}`}

@@ -1,17 +1,14 @@
 import styles from './TrackControls.module.scss';
 import { useEffect, useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { selectAllGenres } from '../../../features/genres/trackListSelectors';
-import { loadGenres } from '../../../features/genres/genresSlice';
-import {
-   loadTracks,
-   setFilter,
-} from '../../../features/trackList/trackListApiSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { selectAllGenres } from '@/features/genres/trackListSelectors';
+import { loadGenres } from '@/features/genres/genresSlice';
+import { loadTracks, setFilter } from '@/features/trackList/trackListApiSlice';
 import {
    selectTrackListMeta,
    selectTrackListQuery,
-} from '../../../features/trackList/trackListSelectors';
-import Select from '../../ui/Select/Select'; // імпортуємо наш компонент
+} from '@/features/trackList/trackListSelectors';
+import Select from '@/components/ui/Select/Select';
 
 export default function Filter() {
    const dispatch = useAppDispatch();

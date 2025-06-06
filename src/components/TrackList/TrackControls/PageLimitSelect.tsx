@@ -1,11 +1,11 @@
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import { loadTracks } from '../../../features/trackList/trackListApiSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { loadTracks } from '@/features/trackList/trackListApiSlice';
 import {
    selectTrackListMeta,
    selectTrackListQuery,
    selectTrackListStatus,
-} from '../../../features/trackList/trackListSelectors';
-import Select from '../../ui/Select/Select';
+} from '@/features/trackList/trackListSelectors';
+import Select from '@/components/ui/Select/Select';
 import styles from './TrackControls.module.scss';
 
 export default function PageLimitSelect() {

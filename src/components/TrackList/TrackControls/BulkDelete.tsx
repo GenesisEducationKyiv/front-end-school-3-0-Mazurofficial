@@ -1,17 +1,17 @@
 import styles from './TrackControls.module.scss';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
    clearSelectedTracks,
    deleteTracksBulk,
    selectAllTracks,
    toggleBulkDeleteMode,
-} from '../../../features/trackList/trackListApiSlice';
+} from '@/features/trackList/trackListApiSlice';
 import {
    selectBulkDeleteMode,
    selectSelectedTrackIds,
    selectTrackListMeta,
-} from '../../../features/trackList/trackListSelectors';
-import Button from '../../ui/Button/Button';
+} from '@/features/trackList/trackListSelectors';
+import Button from '@/components/ui/Button/Button';
 
 export default function BulkDelete() {
    const dispatch = useAppDispatch();
@@ -31,6 +31,7 @@ export default function BulkDelete() {
          void dispatch(deleteTracksBulk({ ids: selectedTrackIds }));
          dispatch(clearSelectedTracks());
          handleToggle();
+         console.log('Tracks are deleted successfully');
       }
    };
 

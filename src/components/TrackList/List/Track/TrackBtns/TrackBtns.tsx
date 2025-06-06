@@ -1,14 +1,11 @@
-import { useAppDispatch, useAppSelector } from '../../../../../app/hooks';
-import {
-   selectTrack,
-   unselectTrack,
-} from '../../../../../features/trackList/trackListApiSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { toggleTrack } from '@/features/trackList/trackListApiSlice';
 import {
    selectBulkDeleteMode,
    selectSelectedTrackIds,
-} from '../../../../../features/trackList/trackListSelectors';
-import type { TrackIdT } from '../../../../../features/trackList/zod_schemas';
-import Checkbox from '../../../../ui/Checkbox/Checkbox';
+} from '@/features/trackList/trackListSelectors';
+import type { TrackIdT } from '@/features/trackList/schema';
+import Checkbox from '@/components/ui/Checkbox/Checkbox';
 import DeleteTrackBtn from './DeleteTrackBtn';
 import EditTrackBtn from './EditTrackBtn';
 import styles from './TrackBtns.module.scss';
@@ -26,11 +23,7 @@ export default function TrackBtns({ id }: TrackBtnsProps) {
 
    // Select track for deleting
    const handleSelect = () => {
-      if (isSelected) {
-         dispatch(unselectTrack(id));
-      } else {
-         dispatch(selectTrack(id));
-      }
+      dispatch(toggleTrack(id));
    };
 
    return (

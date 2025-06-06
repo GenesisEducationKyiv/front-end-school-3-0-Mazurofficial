@@ -1,8 +1,8 @@
-import { useAppSelector } from '../../../../../app/hooks';
-import { selectTrackById } from '../../../../../features/trackList/trackListSelectors';
+import { useAppSelector } from '@/app/hooks';
+import { selectTrackById } from '@/features/trackList/trackListSelectors';
 import styles from './CoverImage.module.scss';
-import fallbackImage from '../../../../../assets/fallbak.svg';
-import type { TrackIdT } from '../../../../../features/trackList/zod_schemas';
+import fallbackImage from '@/assets/fallbak.svg';
+import type { TrackIdT } from '@/features/trackList/schema';
 
 type CoverImageProps = {
    id: TrackIdT;

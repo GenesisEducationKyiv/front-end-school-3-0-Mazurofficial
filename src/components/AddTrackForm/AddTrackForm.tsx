@@ -1,5 +1,5 @@
-import type { CreateTrackDtoT } from '../../features/trackList/zod_schemas';
-import Form from '../ui/Form/Form';
+import type { CreateTrackDtoT } from '@/features/trackList/schema';
+import Form from '@/components/ui/Form/Form';
 
 const initialFormState: CreateTrackDtoT = {
    title: '',

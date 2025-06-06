@@ -1,16 +1,13 @@
 import styles from './TrackControls.module.scss';
 import { useState } from 'react';
-import { useAppDispatch, useAppSelector } from '../../../app/hooks';
-import {
-   loadTracks,
-   setSorting,
-} from '../../../features/trackList/trackListApiSlice';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
+import { loadTracks, setSorting } from '@/features/trackList/trackListApiSlice';
 import {
    selectTrackListMeta,
    selectTrackListQuery,
-} from '../../../features/trackList/trackListSelectors';
-import Select from '../../ui/Select/Select';
-import type { TrackQueryT } from '../../../features/trackList/zod_schemas';
+} from '@/features/trackList/trackListSelectors';
+import Select from '@/components/ui/Select/Select';
+import type { TrackQueryT } from '@/features/trackList/schema';
 
 const sortOptions = [
    { label: 'Title', value: 'title' },

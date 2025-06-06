@@ -1,10 +1,10 @@
-import { useAppDispatch } from '../../../../../app/hooks';
+import { useAppDispatch } from '@/app/hooks';
 import {
    openModal,
    setModalEdit,
-} from '../../../../../features/modalWindow/modalWindowSlice';
-import type { TrackIdT } from '../../../../../features/trackList/zod_schemas';
-import Button from '../../../../ui/Button/Button';
+} from '@/features/modalWindow/modalWindowSlice';
+import type { TrackIdT } from '@/features/trackList/schema';
+import Button from '@/components/ui/Button/Button';
 import styles from './TrackBtns.module.scss';
 
 type EditTrackBtnProps = {
