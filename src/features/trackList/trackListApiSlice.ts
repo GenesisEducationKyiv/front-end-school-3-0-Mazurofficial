@@ -16,6 +16,7 @@ import {
    deleteTracksBulkSchema,
 } from './schema';
 import { safeApiCall } from '../../utils/safeApiCall';
+import { O, pipe, D } from '@mobily/ts-belt';
 
 // Loads a list of tracks from the API with support for pagination, sorting, searching, and filtering by genre.
 export const loadTracks = createAsyncThunk<
@@ -25,13 +26,19 @@ export const loadTracks = createAsyncThunk<
 >(
    'tracks/load-tracks',
    async (params, { extra: { client, api }, rejectWithValue }) => {
-      const queryParams = new URLSearchParams();
-
-      Object.entries(params).forEach(([param, paramValue]) => {
-         // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-         if (paramValue !== undefined && paramValue !== null)
-            queryParams.append(param, paramValue.toString());
-      });
+      const queryParams = pipe(
+         params,
+         D.toPairs<string | number, string>, // split params object into array with tuples [[key,value],...] to easier filtering of nullish values
+         (entries) =>
+            entries.filter(([, value]) => O.isSome(O.fromNullable(value))), // filter nullish parameters
+         (entries) => {
+            const searchParams = new URLSearchParams();
+            entries.forEach(([key, value]) => {
+               searchParams.append(key, String(value));
+            });
+            return searchParams;
+         }
+      );
 
       const url = `${api.ALL_TRACKS}?${queryParams.toString()}`;
 
