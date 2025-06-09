@@ -1,29 +1,35 @@
-import react from "@vitejs/plugin-react"
-import * as path from "node:path"
-import { defineConfig } from "vitest/config"
-import packageJson from "./package.json" with { type: "json" }
+import react from '@vitejs/plugin-react';
+import * as path from 'node:path';
+import { defineConfig } from 'vitest/config';
+import packageJson from './package.json' with { type: 'json' };
 
 // https://vitejs.dev/config/
 export default defineConfig({
-  plugins: [react()],
+   plugins: [react()],
 
-  server: {
-    open: true,
-    port: 3000,
-  },
+   server: {
+      open: true,
+      port: 3000,
+   },
 
-  test: {
-    root: import.meta.dirname,
-    name: packageJson.name,
-    environment: "jsdom",
+   resolve: {
+      alias: {
+         '@': path.resolve(__dirname, 'src'),
+      },
+   },
 
-    typecheck: {
-      enabled: true,
-      tsconfig: path.join(import.meta.dirname, "tsconfig.json"),
-    },
+   test: {
+      root: import.meta.dirname,
+      name: packageJson.name,
+      environment: 'jsdom',
 
-    globals: true,
-    watch: false,
-    setupFiles: ["./src/setupTests.ts"],
-  },
-})
+      typecheck: {
+         enabled: true,
+         tsconfig: path.join(import.meta.dirname, 'tsconfig.json'),
+      },
+
+      globals: true,
+      watch: false,
+      setupFiles: ['./src/setupTests.ts'],
+   },
+});
