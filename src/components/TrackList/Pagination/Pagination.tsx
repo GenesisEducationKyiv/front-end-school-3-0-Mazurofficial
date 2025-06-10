@@ -1,22 +1,24 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { loadTracks } from '@/features/trackList/trackListApiSlice';
+import { useAppSelector } from '@/app/hooks';
 import {
    selectTrackListMeta,
-   selectTrackListQuery,
    selectTrackListStatus,
 } from '@/features/trackList/trackListSelectors';
 import Button from '@/components/ui/Button/Button';
 import styles from './Pagination.module.scss';
+import { useSearchParams } from 'react-router-dom';
 
 export default function Pagination() {
-   const dispatch = useAppDispatch();
-   const { page, limit, totalPages } = useAppSelector(selectTrackListMeta);
-   const trackListQuery = useAppSelector(selectTrackListQuery);
+   const { page, totalPages } = useAppSelector(selectTrackListMeta);
    const status = useAppSelector(selectTrackListStatus);
+   const [, setSearchParams] = useSearchParams();
 
    // Send request to server with newPage
    const handlePageChange = (newPage: number) => {
-      void dispatch(loadTracks({ ...trackListQuery, page: newPage, limit }));
+      //void dispatch(loadTracks({ ...trackListQuery, page: newPage, limit }));
+      setSearchParams((searchParams) => {
+         searchParams.set('page', newPage.toString());
+         return searchParams;
+      });
    };
 
    return (

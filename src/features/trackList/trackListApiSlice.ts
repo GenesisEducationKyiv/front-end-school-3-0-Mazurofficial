@@ -16,31 +16,16 @@ import {
    deleteTracksBulkSchema,
 } from './schema';
 import { safeApiCall } from '../../utils/safeApiCall';
-import { O, pipe, D } from '@mobily/ts-belt';
 
 // Loads a list of tracks from the API with support for pagination, sorting, searching, and filtering by genre.
 export const loadTracks = createAsyncThunk<
    { data: { data: TrackListT; meta: MetaT } },
-   TrackQueryT,
+   URLSearchParams,
    { extra: ExtraType; rejectValue: string }
 >(
    'tracks/load-tracks',
    async (params, { extra: { client, api }, rejectWithValue }) => {
-      const queryParams = pipe(
-         params,
-         D.toPairs<string | number, string>, // split params object into array with tuples [[key,value],...] to easier filtering of nullish values
-         (entries) =>
-            entries.filter(([, value]) => O.isSome(O.fromNullable(value))), // filter nullish parameters
-         (entries) => {
-            const searchParams = new URLSearchParams();
-            entries.forEach(([key, value]) => {
-               searchParams.append(key, String(value));
-            });
-            return searchParams;
-         }
-      );
-
-      const url = `${api.ALL_TRACKS}?${queryParams.toString()}`;
+      const url = `${api.ALL_TRACKS}?${params.toString()}`;
 
       const result = await safeApiCall(() => client.get(url), loadTracksSchema);
 
@@ -221,6 +206,11 @@ export const trackListSlice = createSlice({
    name: 'tracks',
    initialState,
    reducers: {
+      setQuery: (state, action: PayloadAction<Partial<TrackQueryT>>) => {
+         state.query = {
+            ...action.payload,
+         };
+      },
       // Set sorting value
       setSorting: (
          state,
@@ -384,6 +374,7 @@ export const trackListSlice = createSlice({
 });
 
 export const {
+   setQuery,
    setFilter,
    setSorting,
    setSearch,
