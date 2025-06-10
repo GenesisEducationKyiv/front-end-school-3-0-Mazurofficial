@@ -1,16 +1,22 @@
 import styles from './TrackControls.module.scss';
 import type { ChangeEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
-import { useAppDispatch } from '@/app/hooks';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import Input from '@/components/ui/Input/Input';
 import { useSearchParams } from 'react-router-dom';
 import { setSearch } from '@/features/trackList/trackListApiSlice';
+import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
 
 export default function Search() {
    const dispatch = useAppDispatch();
    const isFirstRender = useRef(true);
    const [, setSearchParams] = useSearchParams();
-   const [searchInput, setSearchInput] = useState('');
+   const { search } = useAppSelector(selectTrackListQuery);
+   const [searchInput, setSearchInput] = useState(search ?? '');
+
+   useEffect(() => {
+      setSearchInput(search ?? '');
+   }, [search]);
 
    useEffect(() => {
       // Skip first render

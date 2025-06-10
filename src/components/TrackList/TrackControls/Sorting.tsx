@@ -1,11 +1,12 @@
 import styles from './TrackControls.module.scss';
-import { useState } from 'react';
-import { useAppDispatch } from '@/app/hooks';
+import { useEffect, useState } from 'react';
+import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { setSorting } from '@/features/trackList/trackListApiSlice';
 
 import Select from '@/components/ui/Select/Select';
 import type { TrackQueryT } from '@/features/trackList/schema';
 import { useSearchParams } from 'react-router-dom';
+import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
 
 const sortOptions = [
    { label: 'Title', value: 'title' },
@@ -21,9 +22,21 @@ const orderOptions = [
 
 export default function Sorting() {
    const dispatch = useAppDispatch();
-   const [sort, setSort] = useState<TrackQueryT['sort']>();
-   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
+
+   const initialSort = useAppSelector(selectTrackListQuery).sort;
+   const initialOrder = useAppSelector(selectTrackListQuery).order;
+
+   const [sort, setSort] = useState<TrackQueryT['sort']>(initialSort);
+   const [order, setOrder] = useState<'asc' | 'desc'>(initialOrder ?? 'asc');
    const [, setSearchParams] = useSearchParams();
+
+   useEffect(() => {
+      setSort(initialSort);
+   }, [initialSort]);
+
+   useEffect(() => {
+      setOrder(initialOrder ?? 'asc');
+   }, [initialOrder]);
 
    // Load sorted results from server
    const handleSortChange = (value: string) => {
