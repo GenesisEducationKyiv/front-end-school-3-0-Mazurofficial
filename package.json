@@ -16,6 +16,7 @@
     "type-check": "tsc -b --noEmit"
   },
   "dependencies": {
+    "@mobily/ts-belt": "^3.13.1",
     "@reduxjs/toolkit": "^2.6.1",
     "axios": "^1.8.4",
     "neverthrow": "^8.2.0",
