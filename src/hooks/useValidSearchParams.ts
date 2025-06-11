@@ -25,30 +25,29 @@ export function useValidSearchParams(): {
 
    const getValidSort = (
       key: string,
-      allowed: readonly string[]
+      allowed: readonly SortOption[]
    ): SortOption | '' =>
       pipe(
-         getCleanString(key),
+         getCleanString(key) as SortOption,
          O.filter((v) => allowed.includes(v)),
-         O.map((v) => v as SortOption),
          O.getWithDefault<SortOption | ''>('')
       );
 
    const getValidOrder = (
       key: string,
-      allowed: readonly string[]
+      allowed: readonly OrderOption[]
    ): OrderOption | '' =>
       pipe(
-         getCleanString(key),
+         getCleanString(key) as OrderOption,
          O.filter((v) => allowed.includes(v)),
-         O.map((v) => v as OrderOption),
          O.getWithDefault<OrderOption | ''>('')
       );
 
-   const getNumber = (key: string, defaultValue: number) =>
+   const getNumber = (key: string, defaultValue: number, maxValue: number) =>
       pipe(
          getCleanString(key),
          O.map((v) => parseInt(v, 10)),
+         O.filter((v) => v <= maxValue),
          O.getWithDefault<number>(defaultValue)
       );
 
@@ -57,8 +56,8 @@ export function useValidSearchParams(): {
    O.tap(getCleanString('search'), (v) => (result.search = v));
    O.tap(getCleanString('artist'), (v) => (result.artist = v));
    O.tap(getCleanString('genre'), (v) => (result.genre = v));
-   O.tap(getNumber('page', 1), (v) => (result.page = v));
-   O.tap(getNumber('limit', 10), (v) => (result.limit = v));
+   O.tap(getNumber('page', 1, 5), (v) => (result.page = v));
+   O.tap(getNumber('limit', 10, 50), (v) => (result.limit = v));
 
    const sortValue = getValidSort('sort', sortOptions);
    if (sortValue !== '') {
@@ -75,8 +74,8 @@ export function useValidSearchParams(): {
       result,
       D.toPairs<string | number, string>, // split params object into array with tuples [[key,value],...]
       A.filter(([, value]) => O.isSome(O.fromNullable(value))), // filter nullish parameters
-      A.filter(([, value]) => value !== ''), // filter empty strings using ts-belt
-      A.filter(([, value]) => !Number.isNaN(value)), // filter NaN values using ts-belt
+      A.filter(([, value]) => value !== ''), // filter empty strings
+      A.filter(([, value]) => !Number.isNaN(value)), // filter NaN values
       (entries) => {
          const searchParams = new URLSearchParams();
          entries.forEach(([key, value]) => {

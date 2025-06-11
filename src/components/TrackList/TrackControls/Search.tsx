@@ -14,6 +14,7 @@ export default function Search() {
    const { search } = useAppSelector(selectTrackListQuery);
    const [searchInput, setSearchInput] = useState(search ?? '');
 
+   // shows value from Url if exist
    useEffect(() => {
       setSearchInput(search ?? '');
    }, [search]);
@@ -28,7 +29,8 @@ export default function Search() {
       const timeoutId = setTimeout(() => {
          dispatch(setSearch(searchInput || undefined));
          setSearchParams((searchParams) => {
-            searchParams.set('search', searchInput);
+            if (searchInput) searchParams.set('search', searchInput);
+            else searchParams.delete('search');
             searchParams.set('page', '1');
             return searchParams;
          });

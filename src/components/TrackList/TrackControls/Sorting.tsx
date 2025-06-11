@@ -44,10 +44,8 @@ export default function Sorting() {
       setSort(newSort);
       dispatch(setSorting({ sort: newSort, order }));
       setSearchParams((searchParams) => {
-         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-         newSort
-            ? searchParams.set('sort', newSort)
-            : searchParams.delete('sort');
+         if (newSort) searchParams.set('sort', newSort);
+         else searchParams.delete('sort');
          return searchParams;
       });
    };

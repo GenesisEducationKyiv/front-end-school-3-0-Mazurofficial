@@ -12,6 +12,7 @@ export const useInitialTrackList = () => {
    useEffect(() => {
       void dispatch(loadTracks(paramsUrl));
       dispatch(setQuery(params));
+      // Disabling eslint to prevent infinite loop
       // eslint-disable-next-line react-hooks/exhaustive-deps
    }, [dispatch, searchParams]);
 };

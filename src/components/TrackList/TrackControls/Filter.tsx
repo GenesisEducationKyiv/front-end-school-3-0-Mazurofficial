@@ -29,10 +29,8 @@ export default function Filter() {
    const handleGenreChange = (genre: string) => {
       dispatch(setFilter(genre || undefined));
       setSearchParams((searchParams) => {
-         // eslint-disable-next-line @typescript-eslint/no-unused-expressions
-         genre
-            ? searchParams.set('genre', genre)
-            : searchParams.delete('genre');
+         if (genre) searchParams.set('genre', genre);
+         else searchParams.delete('genre');
          searchParams.set('page', '1');
          return searchParams;
       });
