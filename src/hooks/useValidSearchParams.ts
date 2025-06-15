@@ -1,6 +1,10 @@
 import { useLocation } from 'react-router-dom';
 import { pipe, O, D, A } from '@mobily/ts-belt';
 import type { TrackQueryT } from '@/features/trackList/schema';
+import {
+   getCleanStringFromURL,
+   getValidNumberFromURL,
+} from '@/utils/getUrlParamHelpers';
 
 const sortOptions = ['title', 'artist', 'album', 'createdAt'] as const;
 const orderOptions = ['asc', 'desc'] as const;
@@ -15,20 +19,12 @@ export function useValidSearchParams(): {
    const { search } = useLocation();
    const params = new URLSearchParams(search);
 
-   const getCleanString = (key: string) =>
-      pipe(
-         O.fromNullable(params.get(key)),
-         O.map((s) => s.trim()),
-         O.filter((s) => s.length > 0),
-         O.getWithDefault<string>('')
-      );
-
    const getValidSort = (
       key: string,
       allowed: readonly SortOption[]
    ): SortOption | '' =>
       pipe(
-         getCleanString(key) as SortOption,
+         getCleanStringFromURL(key, params) as SortOption,
          O.filter((v) => allowed.includes(v)),
          O.getWithDefault<SortOption | ''>('')
       );
@@ -38,26 +34,21 @@ export function useValidSearchParams(): {
       allowed: readonly OrderOption[]
    ): OrderOption | '' =>
       pipe(
-         getCleanString(key) as OrderOption,
+         getCleanStringFromURL(key, params) as OrderOption,
          O.filter((v) => allowed.includes(v)),
          O.getWithDefault<OrderOption | ''>('')
       );
 
-   const getNumber = (key: string, defaultValue: number, maxValue: number) =>
-      pipe(
-         getCleanString(key),
-         O.map((v) => parseInt(v, 10)),
-         O.filter((v) => v <= maxValue),
-         O.getWithDefault<number>(defaultValue)
-      );
-
    const result: Partial<TrackQueryT> = {};
 
-   O.tap(getCleanString('search'), (v) => (result.search = v));
-   O.tap(getCleanString('artist'), (v) => (result.artist = v));
-   O.tap(getCleanString('genre'), (v) => (result.genre = v));
-   O.tap(getNumber('page', 1, 5), (v) => (result.page = v));
-   O.tap(getNumber('limit', 10, 50), (v) => (result.limit = v));
+   O.tap(getCleanStringFromURL('search', params), (v) => (result.search = v));
+   O.tap(getCleanStringFromURL('artist', params), (v) => (result.artist = v));
+   O.tap(getCleanStringFromURL('genre', params), (v) => (result.genre = v));
+   O.tap(getValidNumberFromURL('page', params, 1, 5), (v) => (result.page = v));
+   O.tap(
+      getValidNumberFromURL('limit', params, 10, 50),
+      (v) => (result.limit = v)
+   );
 
    const sortValue = getValidSort('sort', sortOptions);
    if (sortValue !== '') {
