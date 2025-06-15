@@ -49,16 +49,12 @@ export function useValidSearchParams(): {
       getValidNumberFromURL('limit', params, 10, 50),
       (v) => (result.limit = v)
    );
-
-   const sortValue = getValidSort('sort', sortOptions);
-   if (sortValue !== '') {
-      result.sort = sortValue;
-   }
-
-   const orderValue = getValidOrder('order', orderOptions);
-   if (orderValue !== '') {
-      result.order = orderValue;
-   }
+   O.tap(getValidSort('sort', sortOptions), (v) => {
+      if (v !== '') result.sort = v;
+   });
+   O.tap(getValidOrder('order', orderOptions), (v) => {
+      if (v !== '') result.order = v;
+   });
 
    // Build back URL from the sanitized object
    const url = pipe(
