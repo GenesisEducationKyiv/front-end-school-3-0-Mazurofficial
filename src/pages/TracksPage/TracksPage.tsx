@@ -8,7 +8,7 @@ import UploadAudioForm from '@/components/UploadAudioForm/UploadAudioForm';
 import {
    selectModalType,
    selectTrackToEdit,
-} from '../../features/modalWindow/modalWindowSelector';
+} from '@/features/modalWindow/modalWindowSelector';
 
 export default function TracksPage() {
    const modalWindowType = useAppSelector(selectModalType);

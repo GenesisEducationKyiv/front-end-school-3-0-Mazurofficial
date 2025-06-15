@@ -1,13 +1,13 @@
 import styles from './TrackControls.module.scss';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { loadTracks, setSorting } from '@/features/trackList/trackListApiSlice';
-import {
-   selectTrackListMeta,
-   selectTrackListQuery,
-} from '@/features/trackList/trackListSelectors';
+import { setSorting } from '@/features/trackList/trackListApiSlice';
+
 import Select from '@/components/ui/Select/Select';
 import type { TrackQueryT } from '@/features/trackList/schema';
+import { useSearchParams } from 'react-router-dom';
+import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { updateSearchParam } from '@/utils/updateSearchParams';
 
 const sortOptions = [
    { label: 'Title', value: 'title' },
@@ -23,18 +23,29 @@ const orderOptions = [
 
 export default function Sorting() {
    const dispatch = useAppDispatch();
-   const { page, limit } = useAppSelector(selectTrackListMeta);
-   const [sort, setSort] = useState<TrackQueryT['sort']>();
-   const [order, setOrder] = useState<'asc' | 'desc'>('asc');
-   const trackListQuery = useAppSelector(selectTrackListQuery);
+
+   const initialSort = useAppSelector(selectTrackListQuery).sort;
+   const initialOrder = useAppSelector(selectTrackListQuery).order;
+
+   const [sort, setSort] = useState<TrackQueryT['sort']>(initialSort);
+   const [order, setOrder] = useState<'asc' | 'desc'>(initialOrder ?? 'asc');
+   const [, setSearchParams] = useSearchParams();
+
+   useEffect(() => {
+      setSort(initialSort);
+   }, [initialSort]);
+
+   useEffect(() => {
+      setOrder(initialOrder ?? 'asc');
+   }, [initialOrder]);
 
    // Load sorted results from server
    const handleSortChange = (value: string) => {
       const newSort = (value || undefined) as TrackQueryT['sort'];
       setSort(newSort);
       dispatch(setSorting({ sort: newSort, order }));
-      void dispatch(
-         loadTracks({ ...trackListQuery, sort: newSort, order, page, limit })
+      setSearchParams((searchParams) =>
+         updateSearchParam(searchParams, 'sort', newSort)
       );
    };
 
@@ -43,9 +54,10 @@ export default function Sorting() {
       const newOrder = value as 'asc' | 'desc';
       setOrder(newOrder);
       dispatch(setSorting({ sort, order: newOrder }));
-      void dispatch(
-         loadTracks({ ...trackListQuery, sort, order: newOrder, page, limit })
-      );
+      setSearchParams((searchParams) => {
+         searchParams.set('order', newOrder);
+         return searchParams;
+      });
    };
 
    return (
