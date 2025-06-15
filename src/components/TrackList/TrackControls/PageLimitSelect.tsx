@@ -7,12 +7,14 @@ import Select from '@/components/ui/Select/Select';
 import styles from './TrackControls.module.scss';
 import { useSearchParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
+import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function PageLimitSelect() {
    const { limit } = useAppSelector(selectTrackListQuery);
    const [limitValue, setLimitValue] = useState(limit ?? 10);
    const status = useAppSelector(selectTrackListStatus);
-   const options = [5, 10, 15, 20, 50].map((val) => ({
+   const possibleLimit = [5, 10, 15, 20, 50];
+   const options = possibleLimit.map((val) => ({
       label: val.toString(),
       value: val.toString(),
    }));
@@ -22,13 +24,15 @@ export default function PageLimitSelect() {
       setLimitValue(limit ?? 10);
    }, [limit]);
 
-   // Send request to load tracks with new Meta{limit}
+   const isValidLimit = (limit: number) => possibleLimit.includes(limit);
+
+   // updates limit in url
    const handleLimitChange = (newLimit: number) => {
-      setSearchParams((searchParams) => {
-         searchParams.set('limit', newLimit.toString());
-         searchParams.set('page', '1');
-         return searchParams;
-      });
+      if (isValidLimit(newLimit)) {
+         setSearchParams((searchParams) =>
+            updateSearchParam(searchParams, 'limit', newLimit.toString(), true)
+         );
+      } else console.error('Inappropriate limit');
    };
 
    return (

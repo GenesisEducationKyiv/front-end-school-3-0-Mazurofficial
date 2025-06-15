@@ -7,6 +7,7 @@ import Select from '@/components/ui/Select/Select';
 import type { TrackQueryT } from '@/features/trackList/schema';
 import { useSearchParams } from 'react-router-dom';
 import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { updateSearchParam } from '@/utils/updateSearchParams';
 
 const sortOptions = [
    { label: 'Title', value: 'title' },
@@ -43,11 +44,9 @@ export default function Sorting() {
       const newSort = (value || undefined) as TrackQueryT['sort'];
       setSort(newSort);
       dispatch(setSorting({ sort: newSort, order }));
-      setSearchParams((searchParams) => {
-         if (newSort) searchParams.set('sort', newSort);
-         else searchParams.delete('sort');
-         return searchParams;
-      });
+      setSearchParams((searchParams) =>
+         updateSearchParam(searchParams, 'sort', newSort)
+      );
    };
 
    // Load ordered results from server

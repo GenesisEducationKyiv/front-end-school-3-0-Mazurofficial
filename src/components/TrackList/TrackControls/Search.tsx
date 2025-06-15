@@ -6,6 +6,7 @@ import Input from '@/components/ui/Input/Input';
 import { useSearchParams } from 'react-router-dom';
 import { setSearch } from '@/features/trackList/trackListApiSlice';
 import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function Search() {
    const dispatch = useAppDispatch();
@@ -28,12 +29,9 @@ export default function Search() {
 
       const timeoutId = setTimeout(() => {
          dispatch(setSearch(searchInput || undefined));
-         setSearchParams((searchParams) => {
-            if (searchInput) searchParams.set('search', searchInput);
-            else searchParams.delete('search');
-            searchParams.set('page', '1');
-            return searchParams;
-         });
+         setSearchParams((searchParams) =>
+            updateSearchParam(searchParams, 'search', searchInput, true)
+         );
       }, 1000);
 
       return () => {

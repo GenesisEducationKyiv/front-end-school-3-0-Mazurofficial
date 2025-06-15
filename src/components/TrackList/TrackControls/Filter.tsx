@@ -7,6 +7,7 @@ import { setFilter } from '@/features/trackList/trackListApiSlice';
 import Select from '@/components/ui/Select/Select';
 import { useSearchParams } from 'react-router-dom';
 import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function Filter() {
    const dispatch = useAppDispatch();
@@ -25,15 +26,17 @@ export default function Filter() {
       setSelectedGenre(genre);
    }, [genre]);
 
+   const isValidGenre = (genre: string) =>
+      (genre && genres.includes(genre.trim())) || genre === '';
+
    // Send request to load tracks of selected genres
-   const handleGenreChange = (genre: string) => {
-      dispatch(setFilter(genre || undefined));
-      setSearchParams((searchParams) => {
-         if (genre) searchParams.set('genre', genre);
-         else searchParams.delete('genre');
-         searchParams.set('page', '1');
-         return searchParams;
-      });
+   const handleGenreChange = (newGenre: string) => {
+      if (isValidGenre(newGenre)) {
+         dispatch(setFilter(newGenre));
+         setSearchParams((searchParams) =>
+            updateSearchParam(searchParams, 'genre', newGenre, true)
+         );
+      } else console.error("Genre doesn't exist");
    };
 
    // Map genres to Option view
