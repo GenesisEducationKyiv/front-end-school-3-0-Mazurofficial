@@ -38,6 +38,8 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: Facebook Meta core team
    - **GitHub Stars**: 236k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**: \_
+   - **Security**: Good
 
 - **react-dom (^19.1.0)**
 
@@ -47,6 +49,8 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Dependencies**: `scheduler`
    - **Maintainers**: Facebook Meta core team
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**: \_
+   - **Security**: Good
 
 ### State Management
 
@@ -59,6 +63,9 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: Redux team
    - **GitHub Stars**: 11k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**:
+      - **HIGH** CVE-2020-28477 (nodejs-immer: prototype pollution may lead to DoS or remote code execution); Fixed in 8.0.1 `immer` version, `@reduxjs/toolkit` >1.7.1 version
+   - **Security**: Good
 
 - **react-redux (^9.2.0)**
    - **Purpose**: Official React bindings for Redux.
@@ -68,6 +75,8 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: Redux team
    - **GitHub Stars**: 23.5k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**: \_
+   - **Security**: Good
 
 ### Routing
 
@@ -79,6 +88,10 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: Remix
    - **GitHub Stars**: 55k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**:
+      - **HIGH** CVE-2025-43865 (react-router: Insufficient Verification of Data Authenticity); Fixed in 7.5.2 (**❗️ Package should be updated**)
+      - **HIGH** CVE-2025-43864 (react-router: Improper Handling of Exceptional Conditions); Fixed in 7.5.2 (**❗️ Package should be updated**)
+   - **Security**: Medium
 
 ### HTTP Client
 
@@ -90,6 +103,9 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: Multiple core contributors
    - **GitHub Stars**: 107k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**:
+      - **MEDIUM** CWE-918 (axios:Server-side Request Forgery (SSRF)); Fixed in 1.8.3
+   - **Security**: Medium
 
 ### Utility Libraries
 
@@ -99,9 +115,11 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Version**: 3.13.1
    - **Weekly Downloads**: 128k
    - **Dependencies**: 0
-   - **Maintainers**: mobily
+   - **Maintainers**: mobily, ...
    - **GitHub Stars**: 1.2k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**: \_
+   - **Security**: Good
 
 - **neverthrow (^8.2.0)**
 
@@ -112,6 +130,8 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: delgdo14
    - **GitHub Stars**: 5.8k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**: \_
+   - **Security**: Good
 
 - **zod (^3.25.42)**
    - **Purpose**: Type-safe schema validation TS-first.
@@ -121,6 +141,9 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: colinhacks
    - **GitHub Stars**: 38.6k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**:
+      - **HIGH** CVE-2023-4316 (zod: Regular Expression Denial of Service (ReDoS)); Fixed in 3.22.3
+   - **Security**: Good
 
 ### Styling
 
@@ -132,6 +155,8 @@ After `npm audit fix` all vulnerabilities were eliminated
    - **Maintainers**: sassbot
    - **GitHub Stars**: 4.1k stars
    - **npm audit**: No reported vulnerabilities
+   - **CVEs**: \_
+   - **Security**: Good
 
 ## Avoidance of Zero-Day Vulnerabilities
 
@@ -206,6 +231,7 @@ After `npm audit fix` all vulnerabilities were eliminated
    - Request timeout handling
    - TypeScript support out of the box
    - Smaller bundle size (reduced attack surface)
+   - `ky` has had no vulnerabilities jet according to SNYK records
 
 #### Migration Steps
 
