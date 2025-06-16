@@ -80,17 +80,17 @@ After `npm audit fix` all vulnerabilities were eliminated
 
 ### Routing
 
-- **react-router-dom (^7.5.1)**
+- **react-router-dom (^7.6.2)**
    - **Purpose**: Browser routing for React web apps.
-   - **Version**: 7.5.1
+   - **Version**: 7.6.2
    - **Weekly Downloads**: 9.5 million
    - **Dependencies**: `react-router`
    - **Maintainers**: Remix
    - **GitHub Stars**: 55k stars
    - **npm audit**: No reported vulnerabilities
    - **CVEs**:
-      - **HIGH** CVE-2025-43865 (react-router: Insufficient Verification of Data Authenticity); Fixed in 7.5.2 (**❗️ Package should be updated**)
-      - **HIGH** CVE-2025-43864 (react-router: Improper Handling of Exceptional Conditions); Fixed in 7.5.2 (**❗️ Package should be updated**)
+      - **HIGH** CVE-2025-43865 (react-router: Insufficient Verification of Data Authenticity); Fixed in 7.5.2
+      - **HIGH** CVE-2025-43864 (react-router: Improper Handling of Exceptional Conditions); Fixed in 7.5.2
    - **Security**: Medium
 
 ### HTTP Client
