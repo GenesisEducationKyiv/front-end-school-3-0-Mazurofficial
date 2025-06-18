@@ -2,20 +2,23 @@ import styles from './TrackControls.module.scss';
 import type { ChangeEvent } from 'react';
 import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import {
-   selectTrackListMeta,
-   selectTrackListQuery,
-} from '@/features/trackList/trackListSelectors';
-import { loadTracks, setSearch } from '@/features/trackList/trackListApiSlice';
 import Input from '@/components/ui/Input/Input';
+import { useSearchParams } from 'react-router-dom';
+import { setSearch } from '@/features/trackList/trackListApiSlice';
+import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function Search() {
    const dispatch = useAppDispatch();
-   const { limit } = useAppSelector(selectTrackListMeta);
-   const trackListQuery = useAppSelector(selectTrackListQuery);
    const isFirstRender = useRef(true);
+   const [, setSearchParams] = useSearchParams();
+   const { search } = useAppSelector(selectTrackListQuery);
+   const [searchInput, setSearchInput] = useState(search ?? '');
 
-   const [searchInput, setSearchInput] = useState('');
+   // shows value from Url if exist
+   useEffect(() => {
+      setSearchInput(search ?? '');
+   }, [search]);
 
    useEffect(() => {
       // Skip first render
@@ -26,19 +29,8 @@ export default function Search() {
 
       const timeoutId = setTimeout(() => {
          dispatch(setSearch(searchInput || undefined));
-
-         // avoid duplicating `search` in trackListQuery
-         // eslint-disable-next-line @typescript-eslint/no-unused-vars
-         const { search, ...queryWithoutSearch } = trackListQuery;
-
-         // Load searching results from server
-         void dispatch(
-            loadTracks({
-               ...queryWithoutSearch,
-               search: searchInput || undefined,
-               page: 1,
-               limit,
-            })
+         setSearchParams((searchParams) =>
+            updateSearchParam(searchParams, 'search', searchInput, true)
          );
       }, 1000);
 

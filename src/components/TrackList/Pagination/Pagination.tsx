@@ -1,27 +1,32 @@
-import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { loadTracks } from '@/features/trackList/trackListApiSlice';
+import { useAppSelector } from '@/app/hooks';
 import {
    selectTrackListMeta,
-   selectTrackListQuery,
    selectTrackListStatus,
 } from '@/features/trackList/trackListSelectors';
 import Button from '@/components/ui/Button/Button';
 import styles from './Pagination.module.scss';
+import { useSearchParams } from 'react-router-dom';
+import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function Pagination() {
-   const dispatch = useAppDispatch();
-   const { page, limit, totalPages } = useAppSelector(selectTrackListMeta);
-   const trackListQuery = useAppSelector(selectTrackListQuery);
+   const { page, totalPages } = useAppSelector(selectTrackListMeta);
    const status = useAppSelector(selectTrackListStatus);
+   const [, setSearchParams] = useSearchParams();
+
+   const isValidPage = (page: number) => 1 <= page && page <= totalPages;
 
    // Send request to server with newPage
    const handlePageChange = (newPage: number) => {
-      void dispatch(loadTracks({ ...trackListQuery, page: newPage, limit }));
+      if (isValidPage(newPage)) {
+         setSearchParams((searchParams) =>
+            updateSearchParam(searchParams, 'page', newPage.toString())
+         );
+      } else console.error('Wrong page');
    };
 
    return (
       <>
-         {totalPages !== 1 && (
+         {totalPages >= 1 && (
             <div className={styles.pagination} data-testid="pagination">
                <Button
                   onClick={() => {
