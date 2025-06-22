@@ -351,7 +351,7 @@ export const trackListSlice = createSlice({
          // Delete specific tracks after succesful delete on server
          .addCase(deleteTracksBulk.fulfilled, (state, action) => {
             state.status = 'received';
-            const deletedIds = action.payload.data.success;
+            const deletedIds = action.payload.success;
             state.list = state.list.filter(
                (track) => !deletedIds.includes(track.id)
             );

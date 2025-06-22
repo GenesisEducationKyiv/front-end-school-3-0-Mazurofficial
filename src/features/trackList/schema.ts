@@ -75,10 +75,8 @@ export const loadTracksSchema = z.object({
 });
 
 export const deleteTracksBulkSchema = z.object({
-   data: z.object({
-      success: z.array(trackIdSchema),
-      failed: z.array(trackIdSchema),
-   }),
+   success: z.array(trackIdSchema),
+   failed: z.array(trackIdSchema),
 });
 
 //types
