@@ -1,13 +1,8 @@
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from '@/utils/test-utils';
 import Pagination from './Pagination';
-import { MemoryRouter, useLocation } from 'react-router-dom';
-
-// Додатковий компонент для перевірки searchParams після кліку
-function SearchParamDisplay() {
-   const location = useLocation();
-   return <div data-testid="location">{location.search}</div>;
-}
+import { MemoryRouter } from 'react-router-dom';
+import LocationDisplayHelper from '@/tests/LocationDisplayHelper/LocationDisplayHelper';
 
 describe('Pagination (black-box)', () => {
    const setup = (page: number, totalPages: number) => {
@@ -29,7 +24,7 @@ describe('Pagination (black-box)', () => {
       return renderWithProviders(
          <MemoryRouter initialEntries={['?page=' + page.toString()]}>
             <Pagination />
-            <SearchParamDisplay />
+            <LocationDisplayHelper />
          </MemoryRouter>,
          {
             preloadedState: {
