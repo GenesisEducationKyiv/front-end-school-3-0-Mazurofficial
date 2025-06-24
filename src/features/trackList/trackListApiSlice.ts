@@ -1,5 +1,4 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
-import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import type { ExtraType } from '@/types/extra';
 import type { Status } from '@/types/status';
 import {
@@ -16,161 +15,12 @@ import {
    deleteTracksBulkSchema,
 } from './schema';
 import { safeApiCall } from '../../utils/safeApiCall';
-
-// Loads a list of tracks from the API with support for pagination, sorting, searching, and filtering by genre.
-export const loadTracks = createAsyncThunk<
-   { data: { data: TrackListT; meta: MetaT } },
-   URLSearchParams,
-   { extra: ExtraType; rejectValue: string }
->(
-   'tracks/load-tracks',
-   async (params, { extra: { client, api }, rejectWithValue }) => {
-      const url = `${api.ALL_TRACKS}?${params.toString()}`;
-
-      const result = await safeApiCall(() => client.get(url), loadTracksSchema);
-
-      if (result.isErr()) return rejectWithValue(result.error);
-
-      return { data: result.value };
-   }
-);
-
-// Sends a new track to the API to be added to the database and returns the created track.
-export const addTrack = createAsyncThunk<
-   TrackT,
-   CreateTrackDtoT,
-   {
-      extra: ExtraType;
-      rejectValue: string;
-   }
->(
-   'tracks/add-track',
-   async (newTrack, { extra: { client, api }, rejectWithValue }) => {
-      const result = await safeApiCall<TrackT>(
-         () => client.post(api.createNewTrack, newTrack),
-         trackSchema
-      );
-      if (result.isErr()) return rejectWithValue(result.error);
-
-      return result.value;
-   }
-);
-
-// Sends updated track data to the API and returns the updated track from the server.
-export const editTrack = createAsyncThunk<
-   TrackT,
-   UpdateTrackDtoT,
-   { extra: ExtraType; rejectValue: string }
->(
-   'tracks/edit-track',
-   async (updatedTrack, { extra: { client, api }, rejectWithValue }) => {
-      const { id, ...newMeta } = updatedTrack;
-
-      const result = await safeApiCall(
-         () => client.put(api.updateTrackById(id), newMeta),
-         trackSchema
-      );
-
-      if (result.isErr()) return rejectWithValue(result.error);
-
-      return result.value;
-   }
-);
-
-// Deletes track by Id
-export const deleteTrack = createAsyncThunk<
-   TrackIdT,
-   TrackIdT,
-   { extra: ExtraType; rejectValue: string }
->(
-   'tracks/delete-track',
-   async (trackId, { extra: { client, api }, rejectWithValue }) => {
-      const result = await safeApiCall(() =>
-         client.delete(api.deleteTrackById(trackId))
-      );
-
-      if (result.isErr()) return rejectWithValue(result.error);
-
-      return trackId;
-   }
-);
+import { createAppSlice } from '@/app/createAppSlice';
 
 export type UploadTrackFileParams = {
    id: string;
    file: File;
 };
-
-// Uploads an audio file for a specific track using multipart/form-data and returns the updated track data.
-export const uploadTrackFile = createAsyncThunk<
-   TrackT,
-   UploadTrackFileParams,
-   {
-      extra: ExtraType;
-      rejectValue: string;
-   }
->(
-   'tracks/upload-file',
-   async ({ id, file }, { extra: { client, api }, rejectWithValue }) => {
-      const formData = new FormData();
-      formData.append('file', file);
-
-      const result = await safeApiCall<TrackT>(
-         () =>
-            client.post(api.uploadAudioToTrackById(id), formData, {
-               headers: { 'Content-Type': 'multipart/form-data' },
-            }),
-         trackSchema
-      );
-
-      if (result.isErr()) return rejectWithValue(result.error);
-
-      return result.value;
-   }
-);
-
-// Deletes the audio file associated with a specific track and returns the updated track data.
-export const deleteTrackFile = createAsyncThunk<
-   TrackT, // return
-   TrackIdT, // input
-   {
-      extra: ExtraType;
-      rejectValue: string;
-   }
->(
-   'tracks/delete-track-file',
-   async (trackId, { extra: { client, api }, rejectWithValue }) => {
-      const result = await safeApiCall<TrackT>(
-         () => client.delete(api.deleteAudioToTrackById(trackId)),
-         trackSchema
-      );
-
-      if (result.isErr()) return rejectWithValue(result.error);
-
-      return result.value;
-   }
-);
-
-// MultiDeletes selected audio files associated with a specific tracks and returns the IDs of succesfully deleted tracks
-export const deleteTracksBulk = createAsyncThunk<
-   DeleteTracksBulkReturnT,
-   { ids: TrackIdT[] },
-   {
-      extra: ExtraType;
-      rejectValue: string;
-   }
->(
-   'tracks/delete-tracks-bulk',
-   async (tracksToDelete, { extra: { client, api }, rejectWithValue }) => {
-      const result = await safeApiCall<DeleteTracksBulkReturnT>(
-         () => client.post(api.deleteMultipleTracks, tracksToDelete),
-         deleteTracksBulkSchema
-      );
-
-      if (result.isErr()) return rejectWithValue(result.error);
-
-      return result.value;
-   }
-);
 
 type TrackListSlice = {
    status: Status;
@@ -202,48 +52,42 @@ const initialState: TrackListSlice = {
    selectedTrackIds: [],
 };
 
-export const trackListSlice = createSlice({
+export const trackListSlice = createAppSlice({
    name: 'tracks',
    initialState,
-   reducers: {
-      setQuery: (state, action: PayloadAction<Partial<TrackQueryT>>) => {
-         state.query = {
-            ...action.payload,
-         };
-      },
-      // Set sorting value
-      setSorting: (
-         state,
-         action: PayloadAction<
-            Partial<{ sort: TrackQueryT['sort']; order: TrackQueryT['order'] }>
-         >
-      ) => {
-         state.query = {
-            ...state.query,
-            ...action.payload,
-            page: 1, // Reset page on new sort
-         };
-      },
-      // Set filter value
-      setFilter: (
-         state,
-         action: PayloadAction<Partial<TrackQueryT['genre']>>
-      ) => {
-         state.query.genre = action.payload;
-         state.query.page = 1; // Reset page on new sort
-      },
-      // Set search value
-      setSearch: (state, action: PayloadAction<TrackQueryT['search']>) => {
-         state.query.search = action.payload;
-         state.query.page = 1;
-      },
-      // On/off bulk delete mode
-      toggleBulkDeleteMode: (state) => {
+   reducers: (create) => ({
+      setQuery: create.reducer(
+         (state, action: PayloadAction<Partial<TrackQueryT>>) => {
+            state.query = {
+               ...action.payload,
+            };
+         }
+      ),
+      setSorting: create.reducer(
+         (state, action: PayloadAction<Partial<TrackQueryT>>) => {
+            state.query = {
+               ...state.query,
+               ...action.payload,
+            };
+         }
+      ),
+      setFilter: create.reducer(
+         (state, action: PayloadAction<Partial<TrackQueryT['genre']>>) => {
+            state.query.genre = action.payload;
+            state.query.page = 1; // Reset page on new sort
+         }
+      ),
+      setSearch: create.reducer(
+         (state, action: PayloadAction<TrackQueryT['search']>) => {
+            state.query.search = action.payload;
+            state.query.page = 1;
+         }
+      ),
+      toggleBulkDeleteMode: create.reducer((state) => {
          state.bulkDeleteMode = !state.bulkDeleteMode;
          state.selectedTrackIds = [];
-      },
-      // Select/unselect track to bulk delete
-      toggleTrack: (state, action: PayloadAction<string>) => {
+      }),
+      toggleTrack: create.reducer((state, action: PayloadAction<string>) => {
          if (state.selectedTrackIds.includes(action.payload)) {
             state.selectedTrackIds = state.selectedTrackIds.filter(
                (id) => id !== action.payload
@@ -251,126 +95,269 @@ export const trackListSlice = createSlice({
          } else {
             state.selectedTrackIds.push(action.payload);
          }
-      },
-      // Select all tracks on page to bulk delete
-      selectAllTracks: (state) => {
+      }),
+      selectAllTracks: create.reducer((state) => {
          state.list.map((track) => {
             if (
                !state.selectedTrackIds.find(
                   (selectedId) => selectedId === track.id
                )
-            )
+            ) {
                state.selectedTrackIds.push(track.id);
+            }
          });
-      },
-      // Unselect all tracks from deleting list
-      clearSelectedTracks: (state) => {
+      }),
+      clearSelectedTracks: create.reducer((state) => {
          state.selectedTrackIds = [];
-      },
-   },
-   extraReducers: (builder) => {
-      builder
-         .addCase(loadTracks.pending, (state) => {
-            state.status = 'loading';
-            state.error = null;
-         })
-         .addCase(loadTracks.rejected, (state, action) => {
-            state.status = 'rejected';
-            state.error = action.payload ?? 'Cannot load data';
-         })
-         // Update state when receiving tracklist data
-         .addCase(loadTracks.fulfilled, (state, action) => {
-            state.status = 'received';
-            state.list = action.payload.data.data;
-            state.meta = action.payload.data.meta;
-         })
-         .addCase(addTrack.pending, (state) => {
-            state.status = 'loading';
-            state.error = null;
-         })
-         .addCase(addTrack.rejected, (state, action) => {
-            state.status = 'rejected';
-            state.error = action.payload ?? 'Failed to add track';
-         })
-         // add new track on first place in array
-         .addCase(addTrack.fulfilled, (state, action) => {
-            state.status = 'received';
-            state.list.unshift(action.payload);
-         })
-         .addCase(editTrack.pending, (state) => {
-            state.status = 'loading';
-            state.error = null;
-         })
-         .addCase(editTrack.rejected, (state, action) => {
-            state.status = 'rejected';
-            state.error = action.payload ?? 'Failed to update track';
-         })
-         // change specific track after succesful update on server
-         .addCase(editTrack.fulfilled, (state, action) => {
-            state.status = 'received';
-            const index = state.list.findIndex(
-               (track) => track.id === action.payload.id
+      }),
+      loadTracks: create.asyncThunk<
+         { data: { data: TrackListT; meta: MetaT } },
+         URLSearchParams,
+         { extra: ExtraType; rejectValue: string }
+      >(
+         async (
+            params: URLSearchParams,
+            { extra: { client, api }, rejectWithValue }
+         ) => {
+            const url = `${api.ALL_TRACKS}?${params.toString()}`;
+            const result = await safeApiCall(
+               () => client.get(url),
+               loadTracksSchema
             );
-            if (index !== -1) {
-               state.list[index] = action.payload;
-            }
-         })
-         .addCase(uploadTrackFile.pending, (state) => {
-            state.status = 'loading';
-            state.error = null;
-         })
-         .addCase(uploadTrackFile.rejected, (state, action) => {
-            state.status = 'rejected';
-            state.error = action.payload ?? 'Failed to update track';
-         })
-         // Add audiofile link to specific track after succesful update on server
-         .addCase(uploadTrackFile.fulfilled, (state, action) => {
-            state.status = 'received';
-            const index = state.list.findIndex(
-               (track) => track.id === action.payload.id
+            if (result.isErr()) return rejectWithValue(result.error);
+            return { data: result.value };
+         },
+         {
+            pending: (state) => {
+               state.status = 'loading';
+               state.error = null;
+            },
+            rejected: (state, action) => {
+               state.status = 'rejected';
+               state.error = action.payload ?? 'Cannot load data';
+            },
+            fulfilled: (state, action) => {
+               state.status = 'received';
+               state.list = action.payload.data.data;
+               state.meta = action.payload.data.meta;
+            },
+         }
+      ),
+      addTrack: create.asyncThunk<
+         TrackT,
+         CreateTrackDtoT,
+         {
+            extra: ExtraType;
+            rejectValue: string;
+         }
+      >(
+         async (newTrack, { extra: { client, api }, rejectWithValue }) => {
+            const result = await safeApiCall<TrackT>(
+               () => client.post(api.createNewTrack, newTrack),
+               trackSchema
             );
-            if (index !== -1) {
-               state.list[index] = action.payload;
-            }
-         })
-         .addCase(deleteTrack.rejected, (state, action) => {
-            state.status = 'rejected';
-            state.error = action.payload ?? 'Failed to delete track';
-         })
-         // Delete specific track after succesful delete on server
-         .addCase(deleteTrack.fulfilled, (state, action) => {
-            state.status = 'received';
-            state.list = state.list.filter(
-               (track) => track.id !== action.payload
+            if (result.isErr()) return rejectWithValue(result.error);
+
+            return result.value;
+         },
+         {
+            pending: (state) => {
+               state.status = 'loading';
+               state.error = null;
+            },
+            rejected: (state, action) => {
+               state.status = 'rejected';
+               state.error = action.payload ?? 'Failed to add track';
+            },
+            // add new track on first place in array
+            fulfilled: (state, action) => {
+               state.status = 'received';
+               state.list.unshift(action.payload);
+            },
+         }
+      ),
+      editTrack: create.asyncThunk<
+         TrackT,
+         UpdateTrackDtoT,
+         { extra: ExtraType; rejectValue: string }
+      >(
+         async (updatedTrack, { extra: { client, api }, rejectWithValue }) => {
+            const { id, ...newMeta } = updatedTrack;
+
+            const result = await safeApiCall(
+               () => client.put(api.updateTrackById(id), newMeta),
+               trackSchema
             );
-         })
-         .addCase(deleteTracksBulk.rejected, (state, action) => {
-            state.status = 'rejected';
-            state.error = action.payload ?? 'Failed to delete tracks';
-         })
-         // Delete specific tracks after succesful delete on server
-         .addCase(deleteTracksBulk.fulfilled, (state, action) => {
-            state.status = 'received';
-            const deletedIds = action.payload.success;
-            state.list = state.list.filter(
-               (track) => !deletedIds.includes(track.id)
+
+            if (result.isErr()) return rejectWithValue(result.error);
+
+            return result.value;
+         },
+         {
+            pending: (state) => {
+               state.status = 'loading';
+               state.error = null;
+            },
+            rejected: (state, action) => {
+               state.status = 'rejected';
+               state.error = action.payload ?? 'Failed to update track';
+            },
+            // change specific track after succesful update on server
+            fulfilled: (state, action) => {
+               state.status = 'received';
+               const index = state.list.findIndex(
+                  (track) => track.id === action.payload.id
+               );
+               if (index !== -1) {
+                  state.list[index] = action.payload;
+               }
+            },
+         }
+      ),
+      deleteTrack: create.asyncThunk<
+         TrackIdT,
+         TrackIdT,
+         { extra: ExtraType; rejectValue: string }
+      >(
+         async (trackId, { extra: { client, api }, rejectWithValue }) => {
+            const result = await safeApiCall(() =>
+               client.delete(api.deleteTrackById(trackId))
             );
-         })
-         .addCase(deleteTrackFile.rejected, (state, action) => {
-            state.status = 'rejected';
-            state.error = action.payload ?? 'Failed to delete track file';
-         })
-         // Delete audiofile link of specific track after succesful delete on server
-         .addCase(deleteTrackFile.fulfilled, (state, action) => {
-            state.status = 'received';
-            const index = state.list.findIndex(
-               (track) => track.id === action.payload.id
+
+            if (result.isErr()) return rejectWithValue(result.error);
+
+            return trackId;
+         },
+         {
+            pending: (state) => {
+               state.status = 'loading';
+               state.error = null;
+            },
+            rejected: (state, action) => {
+               state.status = 'rejected';
+               state.error = action.payload ?? 'Failed to delete track';
+            },
+            fulfilled: (state, action) => {
+               state.status = 'received';
+               state.list = state.list.filter(
+                  (track) => track.id !== action.payload
+               );
+            },
+         }
+      ),
+      uploadTrackFile: create.asyncThunk<
+         TrackT,
+         UploadTrackFileParams,
+         { extra: ExtraType; rejectValue: string }
+      >(
+         async ({ id, file }, { extra: { client, api }, rejectWithValue }) => {
+            const formData = new FormData();
+            formData.append('file', file);
+
+            const result = await safeApiCall<TrackT>(
+               () =>
+                  client.post(api.uploadAudioToTrackById(id), formData, {
+                     headers: { 'Content-Type': 'multipart/form-data' },
+                  }),
+               trackSchema
             );
-            if (index !== -1) {
-               state.list[index] = action.payload;
-            }
-         });
-   },
+
+            if (result.isErr()) return rejectWithValue(result.error);
+
+            return result.value;
+         },
+         {
+            pending: (state) => {
+               state.status = 'loading';
+               state.error = null;
+            },
+            rejected: (state, action) => {
+               state.status = 'rejected';
+               state.error = action.payload ?? 'Failed to upload track file';
+            },
+            fulfilled: (state, action) => {
+               state.status = 'received';
+               const index = state.list.findIndex(
+                  (track) => track.id === action.payload.id
+               );
+               if (index !== -1) {
+                  state.list[index] = action.payload;
+               }
+            },
+         }
+      ),
+      deleteTrackFile: create.asyncThunk<
+         TrackT,
+         TrackIdT,
+         { extra: ExtraType; rejectValue: string }
+      >(
+         async (trackId, { extra: { client, api }, rejectWithValue }) => {
+            const result = await safeApiCall<TrackT>(
+               () => client.delete(api.deleteAudioToTrackById(trackId)),
+               trackSchema
+            );
+
+            if (result.isErr()) return rejectWithValue(result.error);
+
+            return result.value;
+         },
+         {
+            pending: (state) => {
+               state.status = 'loading';
+               state.error = null;
+            },
+            rejected: (state, action) => {
+               state.status = 'rejected';
+               state.error = action.payload ?? 'Failed to delete track file';
+            },
+            fulfilled: (state, action) => {
+               state.status = 'received';
+               const index = state.list.findIndex(
+                  (track) => track.id === action.payload.id
+               );
+               if (index !== -1) {
+                  state.list[index] = action.payload;
+               }
+            },
+         }
+      ),
+      deleteTracksBulk: create.asyncThunk<
+         DeleteTracksBulkReturnT,
+         { ids: TrackIdT[] },
+         { extra: ExtraType; rejectValue: string }
+      >(
+         async (
+            tracksToDelete,
+            { extra: { client, api }, rejectWithValue }
+         ) => {
+            const result = await safeApiCall<DeleteTracksBulkReturnT>(
+               () => client.post(api.deleteMultipleTracks, tracksToDelete),
+               deleteTracksBulkSchema
+            );
+
+            if (result.isErr()) return rejectWithValue(result.error);
+
+            return result.value;
+         },
+         {
+            pending: (state) => {
+               state.status = 'loading';
+               state.error = null;
+            },
+            rejected: (state, action) => {
+               state.status = 'rejected';
+               state.error = action.payload ?? 'Failed to delete tracks';
+            },
+            fulfilled: (state, action) => {
+               state.status = 'received';
+               const deletedIds = action.payload.success;
+               state.list = state.list.filter(
+                  (track) => !deletedIds.includes(track.id)
+               );
+            },
+         }
+      ),
+   }),
 });
 
 export const {
@@ -382,4 +369,11 @@ export const {
    selectAllTracks,
    toggleTrack,
    clearSelectedTracks,
+   loadTracks,
+   addTrack,
+   editTrack,
+   deleteTrack,
+   uploadTrackFile,
+   deleteTrackFile,
+   deleteTracksBulk,
 } = trackListSlice.actions;
