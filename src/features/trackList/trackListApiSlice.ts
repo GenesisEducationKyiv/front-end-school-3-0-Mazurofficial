@@ -4,6 +4,7 @@ import type { Status } from '@/types/status';
 import {
    type MetaT,
    type TrackListT,
+   type TrackListNormalizedT,
    type TrackT,
    type TrackQueryT,
    type CreateTrackDtoT,
@@ -14,8 +15,9 @@ import {
    trackSchema,
    deleteTracksBulkSchema,
 } from './schema';
-import { safeApiCall } from '../../utils/safeApiCall';
+import { safeApiCall } from '@/utils/safeApiCall';
 import { createAppSlice } from '@/app/createAppSlice';
+import normalizeTrackList from '@/utils/normalizeTrackList';
 
 export type UploadTrackFileParams = {
    id: string;
@@ -25,7 +27,7 @@ export type UploadTrackFileParams = {
 type TrackListSlice = {
    status: Status;
    error: string | null;
-   list: TrackListT;
+   list: TrackListNormalizedT;
    meta: MetaT;
    query: TrackQueryT;
    bulkDeleteMode: boolean;
@@ -35,7 +37,10 @@ type TrackListSlice = {
 const initialState: TrackListSlice = {
    status: 'idle',
    error: null,
-   list: [],
+   list: {
+      byId: {},
+      ids: [],
+   },
    meta: {
       total: 0,
       page: 0,
@@ -97,13 +102,9 @@ export const trackListSlice = createAppSlice({
          }
       }),
       selectAllTracks: create.reducer((state) => {
-         state.list.map((track) => {
-            if (
-               !state.selectedTrackIds.find(
-                  (selectedId) => selectedId === track.id
-               )
-            ) {
-               state.selectedTrackIds.push(track.id);
+         state.list.ids.forEach((id) => {
+            if (!state.selectedTrackIds.includes(id)) {
+               state.selectedTrackIds.push(id);
             }
          });
       }),
@@ -138,7 +139,9 @@ export const trackListSlice = createAppSlice({
             },
             fulfilled: (state, action) => {
                state.status = 'received';
-               state.list = action.payload.data.data;
+               state.list = state.list = normalizeTrackList(
+                  action.payload.data.data
+               );
                state.meta = action.payload.data.meta;
             },
          }
@@ -172,7 +175,8 @@ export const trackListSlice = createAppSlice({
             // add new track on first place in array
             fulfilled: (state, action) => {
                state.status = 'received';
-               state.list.unshift(action.payload);
+               state.list.byId[action.payload.id] = action.payload;
+               state.list.ids.unshift(action.payload.id);
             },
          }
       ),
@@ -205,12 +209,7 @@ export const trackListSlice = createAppSlice({
             // change specific track after succesful update on server
             fulfilled: (state, action) => {
                state.status = 'received';
-               const index = state.list.findIndex(
-                  (track) => track.id === action.payload.id
-               );
-               if (index !== -1) {
-                  state.list[index] = action.payload;
-               }
+               state.list.byId[action.payload.id] = action.payload;
             },
          }
       ),
@@ -239,8 +238,10 @@ export const trackListSlice = createAppSlice({
             },
             fulfilled: (state, action) => {
                state.status = 'received';
-               state.list = state.list.filter(
-                  (track) => track.id !== action.payload
+               // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+               delete state.list.byId[action.payload];
+               state.list.ids = state.list.ids.filter(
+                  (id) => id !== action.payload
                );
             },
          }
@@ -277,12 +278,7 @@ export const trackListSlice = createAppSlice({
             },
             fulfilled: (state, action) => {
                state.status = 'received';
-               const index = state.list.findIndex(
-                  (track) => track.id === action.payload.id
-               );
-               if (index !== -1) {
-                  state.list[index] = action.payload;
-               }
+               state.list.byId[action.payload.id] = action.payload;
             },
          }
       ),
@@ -312,12 +308,7 @@ export const trackListSlice = createAppSlice({
             },
             fulfilled: (state, action) => {
                state.status = 'received';
-               const index = state.list.findIndex(
-                  (track) => track.id === action.payload.id
-               );
-               if (index !== -1) {
-                  state.list[index] = action.payload;
-               }
+               state.list.byId[action.payload.id] = action.payload;
             },
          }
       ),
@@ -351,8 +342,12 @@ export const trackListSlice = createAppSlice({
             fulfilled: (state, action) => {
                state.status = 'received';
                const deletedIds = action.payload.success;
-               state.list = state.list.filter(
-                  (track) => !deletedIds.includes(track.id)
+               deletedIds.forEach((id) => {
+                  // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+                  delete state.list.byId[id];
+               });
+               state.list.ids = state.list.ids.filter(
+                  (id) => !deletedIds.includes(id)
                );
             },
          }
