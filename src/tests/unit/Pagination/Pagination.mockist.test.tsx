@@ -2,7 +2,7 @@ import { render, screen, fireEvent } from '@testing-library/react';
 import * as hooks from '@/app/hooks';
 import { vi } from 'vitest';
 import type * as reactRouterDom from 'react-router-dom';
-import Pagination from './Pagination';
+import Pagination from '@/components/TrackList/Pagination/Pagination';
 
 const setSearchParamsMock = vi.fn();
 

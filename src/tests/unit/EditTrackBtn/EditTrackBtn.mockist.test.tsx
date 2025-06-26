@@ -2,9 +2,9 @@ import {
    openModal,
    setModalEdit,
 } from '@/features/modalWindow/modalWindowSlice';
-import EditTrackBtn from './EditTrackBtn';
 import { fireEvent, render, screen } from '@testing-library/react';
 import * as hooks from '@/app/hooks';
+import EditTrackBtn from '@/components/TrackList/List/Track/TrackBtns/EditTrackBtn';
 
 describe('EditTrackBtn (white-box)', () => {
    const dispatchMock = vi.fn();

@@ -1,6 +1,6 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import { vi } from 'vitest';
-import BulkDelete from './BulkDelete';
+import BulkDelete from '@/components/TrackList/TrackControls/BulkDelete';
 import * as hooks from '@/app/hooks';
 import {
    clearSelectedTracks,

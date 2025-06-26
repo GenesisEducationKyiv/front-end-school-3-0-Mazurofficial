@@ -1,6 +1,6 @@
-import EditTrackBtn from './EditTrackBtn';
 import { fireEvent, screen } from '@testing-library/react';
 import { renderWithProviders } from '@/utils/test-utils';
+import EditTrackBtn from '@/components/TrackList/List/Track/TrackBtns/EditTrackBtn';
 
 describe('EditTrackBtn (black-box)', () => {
    const defaultId = '001';

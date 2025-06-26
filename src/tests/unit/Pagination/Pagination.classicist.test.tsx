@@ -1,8 +1,8 @@
 import { screen, fireEvent } from '@testing-library/react';
 import { renderWithProviders } from '@/utils/test-utils';
-import Pagination from './Pagination';
+import Pagination from '@/components/TrackList/Pagination/Pagination';
 import { MemoryRouter } from 'react-router-dom';
-import LocationDisplayHelper from '@/tests/LocationDisplayHelper/LocationDisplayHelper';
+import LocationDisplayHelper from '@/tests/helpers/LocationDisplayHelper';
 
 describe('Pagination (black-box)', () => {
    const setup = (page: number, totalPages: number) => {

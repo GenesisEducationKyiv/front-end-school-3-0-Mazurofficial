@@ -5,7 +5,7 @@ import Filter from '@/components/TrackList/TrackControls/Filter';
 import { renderWithProviders } from '@/utils/test-utils';
 import { vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
-import LocationDisplayHelper from '../LocationDisplayHelper/LocationDisplayHelper';
+import LocationDisplayHelper from '@/tests/helpers/LocationDisplayHelper';
 import { ALL_GENRES } from '@/api/api';
 
 beforeAll(() => {
