@@ -2,7 +2,7 @@ import type { PayloadAction } from '@reduxjs/toolkit';
 import { createSlice } from '@reduxjs/toolkit';
 import type { TrackIdT } from '../trackList/schema';
 
-type modalState = {
+export type modalState = {
    isVisible: boolean;
    type: 'add' | 'edit' | 'upload' | undefined;
    trackToEdit?: TrackIdT;

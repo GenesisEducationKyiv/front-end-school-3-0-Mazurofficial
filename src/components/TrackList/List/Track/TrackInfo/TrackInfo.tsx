@@ -17,10 +17,10 @@ export default function TrackInfo({ id }: TrackInfoProps) {
             data-testid={`track-item-${id}-title`}
          >
             {track?.title}
-            {track?.album && (
-               <span className={styles.trackAlbum}>({track.album})</span>
-            )}
          </h4>
+         {track?.album && (
+            <span className={styles.trackAlbum}>({track.album})</span>
+         )}
          <h5
             className={styles.trackArtist}
             data-testid={`track-item-${id}-artist`}

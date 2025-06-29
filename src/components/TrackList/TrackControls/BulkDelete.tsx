@@ -31,7 +31,6 @@ export default function BulkDelete() {
          void dispatch(deleteTracksBulk({ ids: selectedTrackIds }));
          dispatch(clearSelectedTracks());
          handleToggle();
-         console.log('Tracks are deleted successfully');
       }
    };
 

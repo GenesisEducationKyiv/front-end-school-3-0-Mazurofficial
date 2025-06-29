@@ -1,8 +1,5 @@
 import { useAppSelector } from '@/app/hooks';
-import {
-   selectTrackListMeta,
-   selectTrackListStatus,
-} from '@/features/trackList/trackListSelectors';
+import { selectTrackListMeta } from '@/features/trackList/trackListSelectors';
 import Button from '@/components/ui/Button/Button';
 import styles from './Pagination.module.scss';
 import { useSearchParams } from 'react-router-dom';
@@ -10,7 +7,6 @@ import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function Pagination() {
    const { page, totalPages } = useAppSelector(selectTrackListMeta);
-   const status = useAppSelector(selectTrackListStatus);
    const [, setSearchParams] = useSearchParams();
 
    const isValidPage = (page: number) => 1 <= page && page <= totalPages;
@@ -32,7 +28,7 @@ export default function Pagination() {
                   onClick={() => {
                      handlePageChange(page - 1);
                   }}
-                  disabled={page === 1 || status === 'loading'}
+                  disabled={page === 1}
                   data-testid="pagination-prev"
                >
                   Previous
@@ -44,7 +40,7 @@ export default function Pagination() {
                   onClick={() => {
                      handlePageChange(page + 1);
                   }}
-                  disabled={page === totalPages || status === 'loading'}
+                  disabled={page === totalPages}
                   data-testid="pagination-next"
                >
                   Next

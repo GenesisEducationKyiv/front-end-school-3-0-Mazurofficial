@@ -7,7 +7,7 @@ export default function List() {
    const list = useAppSelector(selectAllTrackList);
 
    return (
-      <ul className={styles.list}>
+      <ul data-testid="track-list" className={styles.list}>
          {list.length > 0 ? (
             list.map((track) => <Track id={track.id} key={track.id} />)
          ) : (
