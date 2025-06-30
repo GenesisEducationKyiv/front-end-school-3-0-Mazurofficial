@@ -1,0 +1,13 @@
+.cover {
+    height: 100px;
+    width: 100px;
+
+    border-radius: 10px;
+}
+
+@media (max-width:768px) {
+    .cover {
+        height: 50px;
+        width: 50px;
+    }
+}
