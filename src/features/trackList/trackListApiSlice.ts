@@ -64,6 +64,7 @@ export const trackListSlice = createAppSlice({
       setQuery: create.reducer(
          (state, action: PayloadAction<Partial<TrackQueryT>>) => {
             state.query = {
+               ...state.query,
                ...action.payload,
             };
          }
