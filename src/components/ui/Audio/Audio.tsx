@@ -16,7 +16,10 @@ import {
 import { getAudioFile } from '@/api/api';
 import Button from '../Button/Button';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import type { TrackIdT, TrackListT } from '@/features/trackList/schema';
+import type {
+   TrackIdT,
+   TrackListNormalizedT,
+} from '@/features/trackList/schema';
 
 export type AudioProps = {
    id: TrackIdT;
@@ -31,8 +34,8 @@ export default function Audio({ id }: AudioProps) {
    const tracks = useAppSelector(selectAllTrackList);
 
    // Collect all available tracks
-   const getSongsHelper = (tracks: TrackListT) => {
-      const songsIds = tracks.map((track) => {
+   const getSongsHelper = (tracks: TrackListNormalizedT) => {
+      const songsIds = Object.values(tracks.byId).map((track) => {
          if (track.audioFile && track.audioFile !== '') {
             return track.id;
          }
@@ -54,7 +57,7 @@ export default function Audio({ id }: AudioProps) {
    const [progress, setProgress] = useState(0);
    const [duration, setDuration] = useState(0);
 
-   const audioUrl = track?.audioFile ? getAudioFile(track.audioFile) : '';
+   const audioUrl = track.audioFile ? getAudioFile(track.audioFile) : '';
 
    // Processing progress updates
    useEffect(() => {
@@ -126,7 +129,7 @@ export default function Audio({ id }: AudioProps) {
 
    return (
       <>
-         {track?.audioFile ? (
+         {track.audioFile ? (
             <div className={styles.audioContainer}>
                {isCurrentTrackPlaying ? (
                   <Button

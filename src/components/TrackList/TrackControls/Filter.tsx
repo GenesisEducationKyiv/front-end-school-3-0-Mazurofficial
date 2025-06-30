@@ -3,10 +3,10 @@ import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import { selectAllGenres } from '@/features/genres/trackListSelectors';
 import { loadGenres } from '@/features/genres/genresSlice';
-import { setFilter } from '@/features/trackList/trackListApiSlice';
+import { setFilter } from '@/features/query/querySlice';
 import Select from '@/components/ui/Select/Select';
 import { useSearchParams } from 'react-router-dom';
-import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { selectTrackListQuery } from '@/features/query/querySelectors';
 import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function Filter() {

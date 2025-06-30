@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import Input from '@/components/ui/Input/Input';
 import { useSearchParams } from 'react-router-dom';
-import { setSearch } from '@/features/trackList/trackListApiSlice';
-import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { setSearch } from '@/features/query/querySlice';
+import { selectTrackListQuery } from '@/features/query/querySelectors';
 import { updateSearchParam } from '@/utils/updateSearchParams';
 
 export default function Search() {

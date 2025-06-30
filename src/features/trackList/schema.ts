@@ -33,6 +33,10 @@ export const updateTrackDtoSchema = trackSchema.omit({
 export type TrackT = z.infer<typeof trackSchema>;
 export type TrackIdT = z.infer<typeof trackIdSchema>;
 export type TrackListT = z.infer<typeof trackListSchema>;
+export type TrackListNormalizedT = {
+   byId: Record<TrackIdT, TrackT>;
+   ids: TrackIdT[];
+};
 export type CreateTrackDtoT = z.infer<typeof createTrackDtoSchema>;
 export type UpdateTrackDtoT = z.infer<typeof updateTrackDtoSchema>;
 
