@@ -1,6 +1,7 @@
 import { useEffect } from 'react';
 import { useAppDispatch } from '@/app/hooks';
-import { loadTracks, setQuery } from './trackListApiSlice';
+import { loadTracks } from './trackListApiSlice';
+import { setQuery } from '@/features/query/querySlice';
 import { useSearchParams } from 'react-router-dom';
 import { useValidSearchParams } from '@/hooks/useValidSearchParams';
 

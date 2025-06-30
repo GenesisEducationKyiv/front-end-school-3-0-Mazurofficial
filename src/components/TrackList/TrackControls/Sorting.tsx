@@ -1,12 +1,12 @@
 import styles from './TrackControls.module.scss';
 import { useEffect, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { setSorting } from '@/features/trackList/trackListApiSlice';
+import { setSorting } from '@/features/query/querySlice';
 
 import Select from '@/components/ui/Select/Select';
 import type { TrackQueryT } from '@/features/trackList/schema';
 import { useSearchParams } from 'react-router-dom';
-import { selectTrackListQuery } from '@/features/trackList/trackListSelectors';
+import { selectTrackListQuery } from '@/features/query/querySelectors';
 import { updateSearchParam } from '@/utils/updateSearchParams';
 
 const sortOptions = [

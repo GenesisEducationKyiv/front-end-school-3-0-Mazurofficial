@@ -6,7 +6,6 @@ import {
    type TrackListT,
    type TrackListNormalizedT,
    type TrackT,
-   type TrackQueryT,
    type CreateTrackDtoT,
    type UpdateTrackDtoT,
    type TrackIdT,
@@ -29,7 +28,6 @@ type TrackListSlice = {
    error: string | null;
    list: TrackListNormalizedT;
    meta: MetaT;
-   query: TrackQueryT;
    bulkDeleteMode: boolean;
    selectedTrackIds: TrackIdT[];
 };
@@ -47,12 +45,6 @@ const initialState: TrackListSlice = {
       limit: 0,
       totalPages: 0,
    },
-   query: {
-      sort: undefined,
-      order: 'asc',
-      search: undefined,
-      genre: undefined,
-   },
    bulkDeleteMode: false,
    selectedTrackIds: [],
 };
@@ -61,34 +53,6 @@ export const trackListSlice = createAppSlice({
    name: 'tracks',
    initialState,
    reducers: (create) => ({
-      setQuery: create.reducer(
-         (state, action: PayloadAction<Partial<TrackQueryT>>) => {
-            state.query = {
-               ...state.query,
-               ...action.payload,
-            };
-         }
-      ),
-      setSorting: create.reducer(
-         (state, action: PayloadAction<Partial<TrackQueryT>>) => {
-            state.query = {
-               ...state.query,
-               ...action.payload,
-            };
-         }
-      ),
-      setFilter: create.reducer(
-         (state, action: PayloadAction<Partial<TrackQueryT['genre']>>) => {
-            state.query.genre = action.payload;
-            state.query.page = 1; // Reset page on new sort
-         }
-      ),
-      setSearch: create.reducer(
-         (state, action: PayloadAction<TrackQueryT['search']>) => {
-            state.query.search = action.payload;
-            state.query.page = 1;
-         }
-      ),
       toggleBulkDeleteMode: create.reducer((state) => {
          state.bulkDeleteMode = !state.bulkDeleteMode;
          state.selectedTrackIds = [];
@@ -357,10 +321,6 @@ export const trackListSlice = createAppSlice({
 });
 
 export const {
-   setQuery,
-   setFilter,
-   setSorting,
-   setSearch,
    toggleBulkDeleteMode,
    selectAllTracks,
    toggleTrack,

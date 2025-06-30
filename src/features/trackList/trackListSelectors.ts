@@ -14,9 +14,6 @@ export const selectTrackById = (state: RootState, id: TrackIdT) =>
 // Select track list meta information
 export const selectTrackListMeta = (state: RootState) => state.tracks.meta;
 
-// Select tracklist query items
-export const selectTrackListQuery = (state: RootState) => state.tracks.query;
-
 // Select bulkdelete mode status
 export const selectBulkDeleteMode = (state: RootState) =>
    state.tracks.bulkDeleteMode;

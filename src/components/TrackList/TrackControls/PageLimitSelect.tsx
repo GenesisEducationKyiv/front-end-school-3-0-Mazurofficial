@@ -1,8 +1,6 @@
 import { useAppSelector } from '@/app/hooks';
-import {
-   selectTrackListQuery,
-   selectTrackListStatus,
-} from '@/features/trackList/trackListSelectors';
+import { selectTrackListStatus } from '@/features/trackList/trackListSelectors';
+import { selectTrackListQuery } from '@/features/query/querySelectors';
 import Select from '@/components/ui/Select/Select';
 import styles from './TrackControls.module.scss';
 import { useSearchParams } from 'react-router-dom';

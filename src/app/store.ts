@@ -1,3 +1,4 @@
+import { querySlice } from '@/features/query/querySlice';
 import type { Action, ThunkAction } from '@reduxjs/toolkit';
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
@@ -14,7 +15,8 @@ const rootReducer = combineSlices(
    trackListSlice,
    modalWindowSlice,
    genresSlice,
-   audioSlice
+   audioSlice,
+   querySlice
 );
 // Infer the `RootState` type from the root reducer
 export type RootState = ReturnType<typeof rootReducer>;
