@@ -1,6 +1,7 @@
 import type { PayloadAction } from '@reduxjs/toolkit';
 import type { ExtraType } from '@/types/extra';
 import type { Status } from '@/types/status';
+import type { LoadTracksT } from './schema';
 import {
    type MetaT,
    type TrackListT,
@@ -53,6 +54,48 @@ export const trackListSlice = createAppSlice({
    name: 'tracks',
    initialState,
    reducers: (create) => ({
+      setTracks: create.reducer((state, action: PayloadAction<LoadTracksT>) => {
+         state.list = normalizeTrackList(action.payload.data);
+         state.meta = action.payload.meta;
+      }),
+      addNewTrack: create.reducer((state, action: PayloadAction<TrackT>) => {
+         state.list.byId[action.payload.id] = action.payload;
+         state.list.ids.unshift(action.payload.id);
+      }),
+      updateExTrack: create.reducer((state, action: PayloadAction<TrackT>) => {
+         state.list.byId[action.payload.id] = action.payload;
+      }),
+      deleteExTrack: create.reducer(
+         (state, action: PayloadAction<TrackIdT>) => {
+            // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+            delete state.list.byId[action.payload];
+            state.list.ids = state.list.ids.filter(
+               (id) => id !== action.payload
+            );
+         }
+      ),
+      deleteExTracksBulk: create.reducer(
+         (state, action: PayloadAction<DeleteTracksBulkReturnT>) => {
+            const deletedIds = action.payload.success;
+            deletedIds.forEach((id) => {
+               // eslint-disable-next-line @typescript-eslint/no-dynamic-delete
+               delete state.list.byId[id];
+            });
+            state.list.ids = state.list.ids.filter(
+               (id) => !deletedIds.includes(id)
+            );
+         }
+      ),
+      uploadExTrackFile: create.reducer(
+         (state, action: PayloadAction<TrackT>) => {
+            state.list.byId[action.payload.id] = action.payload;
+         }
+      ),
+      deleteExTrackFile: create.reducer(
+         (state, action: PayloadAction<TrackT>) => {
+            state.list.byId[action.payload.id] = action.payload;
+         }
+      ),
       toggleBulkDeleteMode: create.reducer((state) => {
          state.bulkDeleteMode = !state.bulkDeleteMode;
          state.selectedTrackIds = [];
@@ -321,6 +364,13 @@ export const trackListSlice = createAppSlice({
 });
 
 export const {
+   setTracks,
+   addNewTrack,
+   updateExTrack,
+   deleteExTrack,
+   deleteExTracksBulk,
+   uploadExTrackFile,
+   deleteExTrackFile,
    toggleBulkDeleteMode,
    selectAllTracks,
    toggleTrack,
