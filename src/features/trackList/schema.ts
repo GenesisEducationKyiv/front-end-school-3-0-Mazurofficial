@@ -6,12 +6,12 @@ export const trackSchema = z.object({
    id: trackIdSchema,
    title: z.string(),
    artist: z.string(),
-   album: z.string().optional(),
+   album: z.string().nullable().optional(),
    genres: z.array(z.string()),
    slug: z.string(),
-   coverImage: z.string().optional(),
-   audioFile: z.string().optional(),
-   createdAt: z.string(),
+   coverImage: z.string().nullable().optional(),
+   audioFile: z.string().nullable().optional(),
+   createdAt: z.string().optional(),
    updatedAt: z.string(),
 });
 
@@ -77,6 +77,28 @@ export const loadTracksSchema = z.object({
    data: trackListSchema,
    meta: metaSchema,
 });
+export const trackListGraphQLSchema = z.object({
+   tracks: loadTracksSchema,
+});
+export const creareTrackSchema = z.object({
+   createTrack: trackSchema,
+});
+
+export type LoadTracksT = z.infer<typeof loadTracksSchema>;
+export type GetTracksGraphT = { tracks: LoadTracksT };
+export type CreateTrackGraphT = { createTrack: TrackT };
+export type UpdateTrackGraphT = { updateTrack: TrackT };
+export type DeleteTrackGraphResultT = {
+   deleteTrack: boolean;
+};
+export type BulkDeleteTracksGraphResultT = {
+   deleteTracks: {
+      success: string[];
+      failed: string[];
+   };
+};
+export type UploadTrackFileGraphT = { uploadTrackFile: TrackT };
+export type DeleteTrackFileGraphT = { deleteTrackFile: TrackT };
 
 export const deleteTracksBulkSchema = z.object({
    success: z.array(trackIdSchema),

@@ -4,17 +4,14 @@ import styles from './List.module.scss';
 import Track from './Track/Track';
 
 export default function List() {
-   const list = useAppSelector(selectAllTrackList).byId;
-
-   return (
-      <ul data-testid="track-list" className={styles.list}>
-         {Object.keys(list).length > 0 ? (
-            Object.values(list).map((track) => (
-               <Track id={track.id} key={track.id} />
-            ))
-         ) : (
-            <h2>Sorry! There are no such tracks</h2>
-         )}
-      </ul>
-   );
+   const trackListIds = useAppSelector(selectAllTrackList).ids;
+   if (trackListIds.length > 0)
+      return (
+         <ul data-testid="track-list" className={styles.list}>
+            {trackListIds.map((trackId) => (
+               <Track id={trackId} key={trackId} />
+            ))}
+         </ul>
+      );
+   return <h2>Sorry! There are no such tracks</h2>;
 }

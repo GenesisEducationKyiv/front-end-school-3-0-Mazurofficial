@@ -5,7 +5,6 @@ import styles from './Form.module.scss';
 import Input from '../Input/Input';
 import GenreSelect from '../../GenreSelect/GenreSelect';
 import Button from '../Button/Button';
-import { addTrack, editTrack } from '@/features/trackList/trackListApiSlice';
 import { closeModal } from '@/features/modalWindow/modalWindowSlice';
 import type {
    CreateTrackDtoT,
@@ -14,6 +13,12 @@ import type {
 } from '@/features/trackList/schema';
 import { trackFormSchema } from './schema';
 import { z } from 'zod';
+import { useCreateTrack } from '@/apollo/mutations/createTrack';
+import {
+   addNewTrack,
+   updateExTrack,
+} from '@/features/trackList/trackListApiSlice';
+import { useUpdateTrack } from '@/apollo/mutations/updateTrack';
 
 export type FormProps = {
    id?: TrackIdT;
@@ -26,6 +31,8 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
    const genres = useAppSelector(selectAllGenres);
    const [formData, setFormData] = useState(initialState);
    const [errors, setErrors] = useState<Record<string, string>>({});
+   const { createTrack } = useCreateTrack();
+   const { updateTrack } = useUpdateTrack();
 
    // Form validation function
    const validate = () => {
@@ -68,24 +75,22 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
    const handleSubmit = async (e: React.FormEvent) => {
       e.preventDefault();
       if (!validate()) return;
-      const resultAction = await dispatch(
-         onSubmitAction === 'EDIT' && id
-            ? editTrack({ id, ...formData })
-            : addTrack(formData)
-      );
-      if (
-         addTrack.fulfilled.match(resultAction) ||
-         editTrack.fulfilled.match(resultAction)
-      ) {
-         setFormData(initialState);
-         dispatch(closeModal());
-         console.log(
-            onSubmitAction === 'ADD'
-               ? 'Track added successfully'
-               : 'Track updated successfully'
-         );
+      if (onSubmitAction === 'EDIT' && id) {
+         const result = await updateTrack({ id, ...formData });
+         if (result.isOk()) {
+            dispatch(updateExTrack(result.value));
+            dispatch(closeModal());
+         } else if (result.isErr()) {
+            console.error(result.error);
+         }
       } else {
-         console.error('Adding/Updating failed');
+         const result = await createTrack(formData);
+         if (result.isOk()) {
+            dispatch(addNewTrack(result.value));
+            dispatch(closeModal());
+         } else if (result.isErr()) {
+            console.error(result.error);
+         }
       }
    };
 

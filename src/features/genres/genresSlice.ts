@@ -3,6 +3,7 @@ import type { Status } from '@/types/status';
 import { genresSchema } from './schema';
 import { safeApiCall } from '@/utils/safeApiCall';
 import { createAppSlice } from '@/app/createAppSlice';
+import type { PayloadAction } from '@reduxjs/toolkit';
 
 type GenresSlice = {
    status: Status;
@@ -20,6 +21,9 @@ export const genresSlice = createAppSlice({
    name: 'genres',
    initialState,
    reducers: (create) => ({
+      setGenres: create.reducer((state, action: PayloadAction<string[]>) => {
+         state.genres = action.payload;
+      }),
       loadGenres: create.asyncThunk<
          {
             data: string[];
@@ -55,4 +59,4 @@ export const genresSlice = createAppSlice({
    }),
 });
 
-export const { loadGenres } = genresSlice.actions;
+export const { setGenres, loadGenres } = genresSlice.actions;
