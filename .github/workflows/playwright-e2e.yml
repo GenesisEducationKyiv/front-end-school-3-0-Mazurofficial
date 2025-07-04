@@ -1,10 +1,10 @@
 name: Playwright E2E Tests
 
-on:
-   push:
-      branches: [main, hw-9-ci-cd]
-   pull_request:
-      branches: [main, hw-9-ci-cd]
+# on:
+#    push:
+#       branches: [main, hw-9-ci-cd]
+#    pull_request:
+#       branches: [main, hw-9-ci-cd]
 
 jobs:
    e2e:
