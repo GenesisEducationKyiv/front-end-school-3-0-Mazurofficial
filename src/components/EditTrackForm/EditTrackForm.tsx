@@ -10,12 +10,12 @@ export type EditTrackFormProps = {
 export default function EditTrackForm({ id }: EditTrackFormProps) {
    const track = useAppSelector((state) => selectTrackById(state, id));
    const initialFormState = {
-      title: track?.title ?? '',
-      artist: track?.artist ?? '',
-      album: track?.album ?? '',
-      genres: track?.genres ?? [],
-      coverImage: track?.coverImage ?? '',
-      audioFile: track?.coverImage ?? '',
+      title: track.title,
+      artist: track.artist,
+      album: track.album,
+      genres: track.genres,
+      coverImage: track.coverImage,
+      audioFile: track.coverImage ?? '',
    };
 
    return (
