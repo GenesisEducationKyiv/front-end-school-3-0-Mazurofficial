@@ -40,6 +40,9 @@ jobs:
          - name: Build frontend
            run: npm run build
 
+         - name: Build Docker image
+           run: docker build -t frontend:ci .
+
          - name: Run unit tests
            run: npx vitest run src/tests/unit --coverage
 

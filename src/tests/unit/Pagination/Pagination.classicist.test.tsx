@@ -16,7 +16,10 @@ describe('Pagination (black-box)', () => {
             },
             status: 'idle' as const,
             error: null,
-            list: [],
+            list: {
+               byId: {},
+               ids: [],
+            },
             query: {},
          },
       };
