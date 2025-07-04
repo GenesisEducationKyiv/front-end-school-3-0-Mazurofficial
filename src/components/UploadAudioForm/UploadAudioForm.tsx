@@ -21,7 +21,7 @@ export default function UploadAudioForm({ id }: UploadAudioFormProps) {
    const [error, setError] = useState<string | null>(null);
    const fileInputRef = useRef<HTMLInputElement | null>(null);
    const chooseDisabled =
-      track?.audioFile !== undefined && track.audioFile !== '';
+      track.audioFile !== undefined && track.audioFile !== '';
 
    // "Choose file" button handler
    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +96,7 @@ export default function UploadAudioForm({ id }: UploadAudioFormProps) {
             </div>
          )}
          {error && <p style={{ color: 'red' }}>{error}</p>}
-         {track?.audioFile && (
+         {track.audioFile && (
             <div className={styles.oldTrack}>
                <audio controls src={getAudioFile(track.audioFile)} />
                <Button onClick={handleDeleteFile}>Delete file</Button>

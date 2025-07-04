@@ -19,6 +19,10 @@ const eslintConfig = config(
          '**/.tmp/',
          '**/.yarn/',
          '**/coverage/',
+         'dist',
+         'node_modules',
+         'public/mockServiceWorker.js',
+         'playwright.config.ts',
       ],
    },
    {
