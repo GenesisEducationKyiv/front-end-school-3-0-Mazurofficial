@@ -4,18 +4,21 @@ import { App } from './App';
 import { store } from './app/store';
 import './styles/global.scss';
 import { BrowserRouter } from 'react-router-dom';
-
+import { ApolloProvider } from '@apollo/client';
+import client from './apollo/client';
 const container = document.getElementById('root');
 
 if (container) {
    const root = createRoot(container);
 
    root.render(
-      <Provider store={store}>
-         <BrowserRouter>
-            <App />
-         </BrowserRouter>
-      </Provider>
+      <ApolloProvider client={client}>
+         <Provider store={store}>
+            <BrowserRouter>
+               <App />
+            </BrowserRouter>
+         </Provider>
+      </ApolloProvider>
    );
 } else {
    throw new Error(
