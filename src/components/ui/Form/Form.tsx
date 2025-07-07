@@ -17,7 +17,7 @@ import { useCreateTrack } from '@/apollo/mutations/createTrack';
 import {
    addNewTrack,
    updateExTrack,
-} from '@/features/trackList/trackListApiSlice';
+} from '@/features/trackList/trackListSlice';
 import { useUpdateTrack } from '@/apollo/mutations/updateTrack';
 
 export type FormProps = {

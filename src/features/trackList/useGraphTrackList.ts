@@ -4,7 +4,7 @@ import type { GetTracksGraphT } from './schema';
 import { trackListGraphQLSchema } from './schema';
 import { useQuery } from '@apollo/client';
 import { GET_TRACKS } from '@/apollo/api';
-import { setTracks } from './trackListApiSlice';
+import { setTracks } from './trackListSlice';
 import { useEffect } from 'react';
 
 const useGraphTrackList = () => {

@@ -5,7 +5,7 @@ import {
    deleteExTracksBulk,
    selectAllTracks,
    toggleBulkDeleteMode,
-} from '@/features/trackList/trackListApiSlice';
+} from '@/features/trackList/trackListSlice';
 import {
    selectBulkDeleteMode,
    selectSelectedTrackIds,

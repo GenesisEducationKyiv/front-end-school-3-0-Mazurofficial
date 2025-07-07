@@ -4,7 +4,7 @@ import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
    deleteExTrackFile,
    uploadExTrackFile,
-} from '@/features/trackList/trackListApiSlice';
+} from '@/features/trackList/trackListSlice';
 import { selectTrackById } from '@/features/trackList/trackListSelectors';
 import Button from '@/components/ui/Button/Button';
 import { getAudioFile } from '@/api/api';

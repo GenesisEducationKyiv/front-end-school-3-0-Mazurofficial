@@ -8,7 +8,8 @@ import {
 import { useValidSearchParams } from '@/hooks/useValidSearchParams';
 import type { CreateTrackGraphT } from '@/features/trackList/schema';
 import { parseMutationResult } from '@/utils/parseMutationResult';
-import { err, type Result } from 'neverthrow';
+import { type Result } from 'neverthrow';
+import { handleMutationError } from '@/utils/handleMutationError';
 
 export function useCreateTrack() {
    const [createTrackMutation, { loading, error }] =
@@ -29,8 +30,7 @@ export function useCreateTrack() {
             trackSchema
          );
       } catch (e) {
-         const errorMessage = e instanceof Error ? e.message : String(e);
-         return err(errorMessage);
+         return handleMutationError(e);
       }
    };
 

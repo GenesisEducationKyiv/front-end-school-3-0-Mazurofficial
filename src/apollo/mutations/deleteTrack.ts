@@ -3,6 +3,7 @@ import { DELETE_TRACK, GET_TRACKS } from '@/apollo/api';
 import { useValidSearchParams } from '@/hooks/useValidSearchParams';
 import type { DeleteTrackGraphResultT } from '@/features/trackList/schema';
 import { err, ok, type Result } from 'neverthrow';
+import { handleMutationError } from '@/utils/handleMutationError';
 
 export function useDeleteTrack() {
    const [deleteTrackMutation, { loading, error }] =
@@ -20,8 +21,7 @@ export function useDeleteTrack() {
          }
          return ok(result.data.deleteTrack);
       } catch (e) {
-         const errorMessage = e instanceof Error ? e.message : String(e);
-         return err(errorMessage);
+         return handleMutationError(e);
       }
    };
 

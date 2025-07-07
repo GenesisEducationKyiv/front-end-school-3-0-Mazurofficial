@@ -7,7 +7,8 @@ import {
 } from '@/features/trackList/schema';
 import { useValidSearchParams } from '@/hooks/useValidSearchParams';
 import { parseMutationResult } from '@/utils/parseMutationResult';
-import { err, type Result } from 'neverthrow';
+import { type Result } from 'neverthrow';
+import { handleMutationError } from '@/utils/handleMutationError';
 
 export function useUploadTrackFile() {
    const [uploadTrackFileMutation, { loading, error }] =
@@ -29,8 +30,7 @@ export function useUploadTrackFile() {
             trackSchema
          );
       } catch (e) {
-         const errorMessage = e instanceof Error ? e.message : String(e);
-         return err(errorMessage);
+         return handleMutationError(e);
       }
    };
 

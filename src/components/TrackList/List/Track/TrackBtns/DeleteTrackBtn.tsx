@@ -3,7 +3,8 @@ import { useAppDispatch } from '@/app/hooks';
 import type { TrackIdT } from '@/features/trackList/schema';
 import Button from '@/components/ui/Button/Button';
 import { useDeleteTrack } from '@/apollo/mutations/deleteTrack';
-import { deleteExTrack } from '@/features/trackList/trackListApiSlice';
+import { deleteExTrack } from '@/features/trackList/trackListSlice';
+import Spinner from '@/components/ui/Spinner/Spinner';
 
 type DeleteTrackBtnProps = {
    id: TrackIdT;
@@ -11,7 +12,7 @@ type DeleteTrackBtnProps = {
 
 export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
    const dispatch = useAppDispatch();
-   const { deleteTrack } = useDeleteTrack();
+   const { deleteTrack, loading } = useDeleteTrack();
 
    // Delete track by id
    const handleDeleteTrack = async (id: string) => {
@@ -24,6 +25,16 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
          }
       }
    };
+
+   if (loading)
+      return (
+         <Button
+            disabled
+            className={`${styles.iconButton} ${styles.deleteButton}`}
+         >
+            <Spinner />
+         </Button>
+      );
 
    return (
       <Button

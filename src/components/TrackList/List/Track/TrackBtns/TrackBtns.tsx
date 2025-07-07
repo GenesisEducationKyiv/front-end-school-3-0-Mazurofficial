@@ -1,5 +1,5 @@
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
-import { toggleTrack } from '@/features/trackList/trackListApiSlice';
+import { toggleTrack } from '@/features/trackList/trackListSlice';
 import {
    selectBulkDeleteMode,
    selectSelectedTrackIds,

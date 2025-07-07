@@ -7,7 +7,8 @@ import {
    type DeleteTracksBulkReturnT,
 } from '@/features/trackList/schema';
 import { parseMutationResult } from '@/utils/parseMutationResult';
-import { err, type Result } from 'neverthrow';
+import { type Result } from 'neverthrow';
+import { handleMutationError } from '@/utils/handleMutationError';
 
 export function useBulkDeleteTracks() {
    const [bulkDeleteTracksMutation, { loading, error }] =
@@ -28,8 +29,7 @@ export function useBulkDeleteTracks() {
             deleteTracksBulkSchema
          );
       } catch (e) {
-         const errorMessage = e instanceof Error ? e.message : String(e);
-         return err(errorMessage);
+         return handleMutationError(e);
       }
    };
 
