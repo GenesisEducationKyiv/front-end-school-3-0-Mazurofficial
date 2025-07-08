@@ -2,7 +2,7 @@ import { querySlice } from '@/features/query/querySlice';
 import type { Action, ThunkAction } from '@reduxjs/toolkit';
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
-import { trackListSlice } from '@/features/trackList/trackListApiSlice';
+import { trackListSlice } from '@/features/trackList/trackListSlice';
 import axios from 'axios';
 import * as api from '@/api/api';
 import { modalWindowSlice } from '@/features/modalWindow/modalWindowSlice';

@@ -16,9 +16,13 @@
     "type-check": "tsc -b --noEmit"
   },
   "dependencies": {
+    "@apollo/client": "^3.13.8",
     "@mobily/ts-belt": "^3.13.1",
     "@reduxjs/toolkit": "^2.6.1",
+    "@types/apollo-upload-client": "^18.0.0",
+    "apollo-upload-client": "^18.0.1",
     "axios": "^1.8.4",
+    "graphql": "^16.11.0",
     "neverthrow": "^8.2.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",

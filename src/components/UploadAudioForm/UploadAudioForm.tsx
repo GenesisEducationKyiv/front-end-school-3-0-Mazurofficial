@@ -2,13 +2,15 @@ import styles from './UploadAudioForm.module.scss';
 import { useRef, useState } from 'react';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import {
-   deleteTrackFile,
-   uploadTrackFile,
-} from '@/features/trackList/trackListApiSlice';
+   deleteExTrackFile,
+   uploadExTrackFile,
+} from '@/features/trackList/trackListSlice';
 import { selectTrackById } from '@/features/trackList/trackListSelectors';
 import Button from '@/components/ui/Button/Button';
 import { getAudioFile } from '@/api/api';
 import type { TrackIdT } from '@/features/trackList/schema';
+import { useUploadTrackFile } from '@/apollo/mutations/uploadTrackFile';
+import { useDeleteTrackFile } from '@/apollo/mutations/deleteTrackFile';
 
 export type UploadAudioFormProps = {
    id: TrackIdT;
@@ -21,7 +23,12 @@ export default function UploadAudioForm({ id }: UploadAudioFormProps) {
    const [error, setError] = useState<string | null>(null);
    const fileInputRef = useRef<HTMLInputElement | null>(null);
    const chooseDisabled =
-      track?.audioFile !== undefined && track.audioFile !== '';
+      track.audioFile !== undefined &&
+      track.audioFile !== '' &&
+      track.audioFile !== null;
+
+   const { uploadTrackFile } = useUploadTrackFile();
+   const { deleteTrackFile } = useDeleteTrackFile();
 
    // "Choose file" button handler
    const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -29,6 +36,7 @@ export default function UploadAudioForm({ id }: UploadAudioFormProps) {
       if (!selected) return;
 
       const validTypes = ['audio/mpeg', 'audio/wav'];
+      console.log(selected.type);
       if (!validTypes.includes(selected.type)) {
          setError('Only MP3 or WAV files are allowed.');
          return;
@@ -46,13 +54,14 @@ export default function UploadAudioForm({ id }: UploadAudioFormProps) {
    // Upload audio file on server
    const handleUpload = async () => {
       if (!file) return;
-      const result = await dispatch(uploadTrackFile({ id, file }));
-      if (uploadTrackFile.fulfilled.match(result)) {
+      const result = await uploadTrackFile(id, file);
+      if (result.isOk()) {
          setFile(null);
-         console.log('Upload successful');
-      } else {
-         setError('Upload failed');
-         console.error('Update failed:', result.payload);
+         setError(null);
+         dispatch(uploadExTrackFile(result.value));
+      } else if (result.isErr()) {
+         setError(result.error || 'Upload failed');
+         console.error('Upload failed:', result.error);
       }
    };
 
@@ -63,8 +72,16 @@ export default function UploadAudioForm({ id }: UploadAudioFormProps) {
    };
 
    // Delete existing file
-   const handleDeleteFile = () => {
-      void dispatch(deleteTrackFile(id));
+   const handleDeleteFile = async () => {
+      const result = await deleteTrackFile(id);
+      if (result.isOk()) {
+         setError(null);
+         setFile(null);
+         dispatch(deleteExTrackFile(result.value));
+      } else if (result.isErr()) {
+         setError(result.error || 'Failed to delete audio file');
+         console.error('Delete audio file failed:', result.error);
+      }
    };
 
    return (
@@ -96,10 +113,12 @@ export default function UploadAudioForm({ id }: UploadAudioFormProps) {
             </div>
          )}
          {error && <p style={{ color: 'red' }}>{error}</p>}
-         {track?.audioFile && (
+         {track.audioFile && (
             <div className={styles.oldTrack}>
                <audio controls src={getAudioFile(track.audioFile)} />
-               <Button onClick={handleDeleteFile}>Delete file</Button>
+               <Button onClick={() => void handleDeleteFile()}>
+                  Delete file
+               </Button>
             </div>
          )}
       </div>
