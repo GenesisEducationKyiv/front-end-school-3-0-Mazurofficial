@@ -20,6 +20,7 @@ export default function Button({
          disabled={disabled}
          className={`${styles.button} ${className}`}
          title={title}
+         aria-label={rest['aria-label'] ?? 'button'}
          {...rest}
       >
          {children}

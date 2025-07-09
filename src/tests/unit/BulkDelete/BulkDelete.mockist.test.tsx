@@ -4,7 +4,7 @@ import BulkDelete from '@/components/TrackList/TrackControls/BulkDelete';
 import * as hooks from '@/app/hooks';
 import {
    clearSelectedTracks,
-   deleteTracksBulk,
+   deleteExTracksBulk,
    selectAllTracks,
    toggleBulkDeleteMode,
 } from '@/features/trackList/trackListSlice';
@@ -118,7 +118,7 @@ describe('BulkDelete', () => {
       fireEvent.click(deleteBtn);
 
       expect(dispatchMock).not.toHaveBeenCalledWith(
-         deleteTracksBulk({ ids: defaultSelectedTrackIds })
+         deleteExTracksBulk({ success: defaultSelectedTrackIds, failed: [] })
       );
    });
 
