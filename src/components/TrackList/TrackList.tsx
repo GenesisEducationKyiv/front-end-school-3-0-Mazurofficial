@@ -2,16 +2,13 @@ import Pagination from './Pagination/Pagination';
 import List from './List/List';
 import TrackControls from './TrackControls/TrackControls';
 import styles from './TrackList.module.scss';
-import { useAppSelector } from '@/app/hooks';
-import { selectTrackListStatus } from '@/features/trackList/trackListSelectors';
 import Preloader from '../ui/Preloader/Preloader';
-import { useInitialTrackList } from '@/features/trackList/useTrackList';
+import useGraphTrackList from '@/features/trackList/useGraphTrackList';
 
 export default function TrackList() {
-   const loadingStatus = useAppSelector(selectTrackListStatus);
-   useInitialTrackList();
+   const { loading, error } = useGraphTrackList();
 
-   if (loadingStatus === 'loading') {
+   if (loading) {
       return (
          <div className={styles.trackList}>
             <h1 data-testid="tracks-header">Your personal tracklist</h1>
@@ -20,7 +17,14 @@ export default function TrackList() {
          </div>
       );
    }
-
+   if (error) {
+      return (
+         <div className={styles.trackList}>
+            <h1 data-testid="tracks-header">Something went wrong</h1>
+            <p>{error}</p>
+         </div>
+      );
+   }
    return (
       <div className={styles.trackList}>
          <h1 data-testid="tracks-header">Your personal tracklist</h1>

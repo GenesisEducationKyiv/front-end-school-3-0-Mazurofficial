@@ -2,7 +2,7 @@
 
 > **Genesis Academy Frontend School Testing Project**
 
-This is a music application built with **React**, **Redux**, and **TypeScript**, powered by **Vite** for blazing-fast development 🚀. 
+This is a music application built with **React**, **Redux**, and **TypeScript**, powered by **Vite** for blazing-fast development 🚀.
 
 Designed with scalability and maintainability in mind, this project serves as a robust template for modern frontend apps.
 
@@ -16,17 +16,17 @@ Designed with scalability and maintainability in mind, this project serves as a 
 - `preview` - locally preview production build
 - `test` - launch test runner
 
-
 ## ⚙️ Tech Stack
 
-| Tech              | Description                                      |
-| ----------------- | ------------------------------------------------ |
-| **React**         | UI Library for building user interfaces          |
-| **Redux Toolkit** | State management with simplified configuration   |
-| **TypeScript**    | Typed superset of JavaScript                     |
-| **Vite**          | Next-gen frontend tooling for development & build|
-| **Vitest**        | Lightning fast unit testing powered by Vite      |
-| **React Testing Library** | Testing utilities for React components  |
+| Tech                         | Description                                       |
+| ---------------------------- | ------------------------------------------------- |
+| **React**                    | UI Library for building user interfaces           |
+| **Redux Toolkit**            | State management with simplified configuration    |
+| **TypeScript**               | Typed superset of JavaScript                      |
+| **Vite**                     | Next-gen frontend tooling for development & build |
+| **Vitest**                   | Lightning fast unit testing powered by Vite       |
+| **React Testing Library**    | Testing utilities for React components            |
+| **rollup-plugin-visualizer** | Bundle analysis and visualization                 |
 
 ---
 
@@ -59,39 +59,39 @@ This project delivers a full-featured experience for managing music tracks, comb
 - **CRUD operations** using `createAsyncThunk` (`POST`, `PUT`, `DELETE`, `GET`)
 - Centralized state management via **Redux Toolkit** store
 - **Server-side logic** for:
-  - Filtering
-  - Sorting
-  - Order direction change
-  - Page limit and pagination
-  - Search queries
+   - Filtering
+   - Sorting
+   - Order direction change
+   - Page limit and pagination
+   - Search queries
 
 ---
 
 ### 🎧 Track List Experience
 
 - **Preloader**:
-  - Visual loader while fetching track data
+   - Visual loader while fetching track data
 - **Custom Audio Component**:
-  - Saves playback progress
-  - Ensures only one track plays at a time
+   - Saves playback progress
+   - Ensures only one track plays at a time
 - **Debounced Search**:
-  - Reduces API calls with optimized search delay
+   - Reduces API calls with optimized search delay
 
 ---
 
 ### 📝 Track Management
 
 - **Modal Forms** for:
-  - Creating and editing track metadata
-  - Fields include: title, artist, album, genres, cover image link
+   - Creating and editing track metadata
+   - Fields include: title, artist, album, genres, cover image link
 - **Dynamic Genre Selection**:
-  - Add/remove genres using tag-style UI
+   - Add/remove genres using tag-style UI
 - **Cover Image Handling**:
-  - Validates image URL or displays default image
+   - Validates image URL or displays default image
 - **Audio Upload Flow**:
-  - Separate flow for uploading and replacing files
-  - Validates file type and size
-  - Playback using native HTML `<audio>` element
+   - Separate flow for uploading and replacing files
+   - Validates file type and size
+   - Playback using native HTML `<audio>` element
 
 ---
 
@@ -110,5 +110,27 @@ Built with reusable and accessible custom components:
 ### 📦 Advanced Features
 
 - **Bulk Select Mode**:
-  - Select multiple tracks at once
-  - Enables bulk actions like mass deletion
+   - Select multiple tracks at once
+   - Enables bulk actions like mass deletion
+
+---
+
+## 🏗️ Bundle Optimization & Debugging
+
+### Bundle Analysis
+
+- Integrated **rollup-plugin-visualizer** for bundle analysis.
+- After running `npm run build`, an interactive report will open in your browser, showing the bundle composition and helping to identify unnecessary code in the final build.
+
+#### How to use:
+
+1. Run the production build:
+   ```bash
+   npm run build
+   ```
+2. The bundle visualizer will automatically open. Explore which modules are included and their sizes.
+
+### Source Maps
+
+- Source maps are enabled for production builds. This allows you to debug the original TypeScript/JSX code in the browser, even after minification.
+- You can find `.map` files in the `dist/` directory after building.
