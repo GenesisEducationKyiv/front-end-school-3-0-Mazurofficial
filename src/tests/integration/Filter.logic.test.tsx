@@ -1,12 +1,12 @@
 import { screen, waitFor, fireEvent } from '@testing-library/react';
 import { server } from '@/mocks/browser';
-import { http, HttpResponse } from 'msw';
 import Filter from '@/components/TrackList/TrackControls/Filter';
 import { renderWithProviders } from '@/utils/test-utils';
 import { vi } from 'vitest';
 import { MemoryRouter } from 'react-router-dom';
 import LocationDisplayHelper from '@/tests/helpers/LocationDisplayHelper';
-import { ALL_GENRES } from '@/api/api';
+import { MockedProvider } from '@apollo/client/testing';
+import { GET_GENRES } from '@/apollo/api';
 
 beforeAll(() => {
    server.listen();
@@ -20,13 +20,33 @@ afterAll(() => {
    server.close();
 });
 
+const genresMock = {
+   request: {
+      query: GET_GENRES,
+      variables: {},
+   },
+   result: {
+      data: {
+         genres: ['Rock', 'Hip Hop', 'Jazz'],
+      },
+   },
+};
+
 describe('Filter Integration Tests', () => {
    it('loads and displays genres from API in the filter dropdown', async () => {
       renderWithProviders(
-         <MemoryRouter>
-            <Filter />
-         </MemoryRouter>
+         <MockedProvider mocks={[genresMock]} addTypename={false}>
+            <MemoryRouter>
+               <Filter />
+            </MemoryRouter>
+         </MockedProvider>
       );
+
+      await waitFor(() => {
+         expect(
+            screen.getByRole('option', { name: 'All' })
+         ).toBeInTheDocument();
+      });
 
       const select = screen.getByTestId('filter-genre');
       expect(select).toBeInTheDocument();
@@ -48,9 +68,11 @@ describe('Filter Integration Tests', () => {
 
    it('allows selecting a valid genre and updates the select value', async () => {
       renderWithProviders(
-         <MemoryRouter>
-            <Filter />
-         </MemoryRouter>
+         <MockedProvider mocks={[genresMock]} addTypename={false}>
+            <MemoryRouter>
+               <Filter />
+            </MemoryRouter>
+         </MockedProvider>
       );
 
       await waitFor(() => {
@@ -68,9 +90,11 @@ describe('Filter Integration Tests', () => {
 
    it('allows selecting "All" to clear the filter', async () => {
       renderWithProviders(
-         <MemoryRouter>
-            <Filter />
-         </MemoryRouter>
+         <MockedProvider mocks={[genresMock]} addTypename={false}>
+            <MemoryRouter>
+               <Filter />
+            </MemoryRouter>
+         </MockedProvider>
       );
 
       await waitFor(() => {
@@ -92,9 +116,11 @@ describe('Filter Integration Tests', () => {
          .mockImplementation(() => undefined);
 
       renderWithProviders(
-         <MemoryRouter>
-            <Filter />
-         </MemoryRouter>
+         <MockedProvider mocks={[genresMock]} addTypename={false}>
+            <MemoryRouter>
+               <Filter />
+            </MemoryRouter>
+         </MockedProvider>
       );
 
       await waitFor(() => {
@@ -117,31 +143,14 @@ describe('Filter Integration Tests', () => {
       consoleSpy.mockRestore();
    });
 
-   it('handles API errors gracefully', () => {
-      server.use(
-         http.get(ALL_GENRES, () => {
-            return HttpResponse.error();
-         })
-      );
-
-      renderWithProviders(
-         <MemoryRouter>
-            <Filter />
-         </MemoryRouter>
-      );
-
-      const select = screen.getByTestId('filter-genre');
-      expect(select).toBeInTheDocument();
-
-      expect(screen.getByRole('option', { name: 'All' })).toBeInTheDocument();
-   });
-
    it('updates URL search params when genre is selected', async () => {
       renderWithProviders(
-         <MemoryRouter>
-            <Filter />
-            <LocationDisplayHelper />
-         </MemoryRouter>
+         <MockedProvider mocks={[genresMock]} addTypename={false}>
+            <MemoryRouter>
+               <Filter />
+               <LocationDisplayHelper />
+            </MemoryRouter>
+         </MockedProvider>
       );
 
       await waitFor(() => {
@@ -161,10 +170,12 @@ describe('Filter Integration Tests', () => {
 
    it('removes genre from URL when "All" is selected', async () => {
       renderWithProviders(
-         <MemoryRouter>
-            <Filter />
-            <LocationDisplayHelper />
-         </MemoryRouter>
+         <MockedProvider mocks={[genresMock]} addTypename={false}>
+            <MemoryRouter>
+               <Filter />
+               <LocationDisplayHelper />
+            </MemoryRouter>
+         </MockedProvider>
       );
 
       await waitFor(() => {

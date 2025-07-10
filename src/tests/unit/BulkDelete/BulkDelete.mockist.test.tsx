@@ -13,6 +13,10 @@ import {
    selectSelectedTrackIds,
    selectTrackListMeta,
 } from '@/features/trackList/trackListSelectors';
+import { MockedProvider } from '@apollo/client/testing';
+import { MemoryRouter } from 'react-router-dom';
+import * as bulkDeleteModule from '@/apollo/mutations/bulkDeleteTracks';
+import { act } from 'react-dom/test-utils';
 
 describe('BulkDelete', () => {
    const dispatchMock = vi.fn();
@@ -28,16 +32,36 @@ describe('BulkDelete', () => {
          if (selector === selectTrackListMeta) return { limit: defaultLimit };
          return undefined;
       });
+      vi.spyOn(bulkDeleteModule, 'useBulkDeleteTracks').mockReturnValue({
+         bulkDeleteTracks: vi.fn().mockResolvedValue({
+            isOk: () => true,
+            value: { success: ['1', '2'], failed: [] },
+         }),
+         loading: false,
+         error: undefined,
+      });
    });
 
    it('renders Bulk Delete button when not in bulk delete mode', () => {
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       expect(screen.getByTestId('select-mode-toggle')).toBeInTheDocument();
       expect(screen.getByText(/Bulk Delete/i)).toBeInTheDocument();
    });
 
    it('toggles bulk delete mode when toggle button is clicked', () => {
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       const toggleBtn = screen.getByTestId('select-mode-toggle');
       fireEvent.click(toggleBtn);
       expect(dispatchMock).toHaveBeenCalledWith(toggleBulkDeleteMode());
@@ -50,7 +74,13 @@ describe('BulkDelete', () => {
          if (selector === selectTrackListMeta) return { limit: defaultLimit };
          return undefined;
       });
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       expect(screen.getByText('Cancel')).toBeInTheDocument();
    });
 
@@ -61,7 +91,13 @@ describe('BulkDelete', () => {
          if (selector === selectTrackListMeta) return { limit: 5 };
          return undefined;
       });
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       expect(screen.getByTestId('select-all')).toBeInTheDocument();
    });
 
@@ -72,7 +108,13 @@ describe('BulkDelete', () => {
          if (selector === selectTrackListMeta) return { limit: 5 };
          return undefined;
       });
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       const selectAllBtn = screen.getByTestId('select-all');
       fireEvent.click(selectAllBtn);
       expect(dispatchMock).toHaveBeenCalledWith(selectAllTracks());
@@ -86,7 +128,13 @@ describe('BulkDelete', () => {
          if (selector === selectTrackListMeta) return { limit: defaultLimit };
          return undefined;
       });
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       expect(screen.getByTestId('bulk-delete-button')).toBeInTheDocument();
    });
 
@@ -97,7 +145,13 @@ describe('BulkDelete', () => {
          if (selector === selectTrackListMeta) return { limit: defaultLimit };
          return undefined;
       });
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       expect(
          screen.queryByTestId('bulk-delete-button')
       ).not.toBeInTheDocument();
@@ -113,7 +167,13 @@ describe('BulkDelete', () => {
       });
       vi.spyOn(window, 'confirm').mockReturnValue(false);
 
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       const deleteBtn = screen.getByTestId('bulk-delete-button');
       fireEvent.click(deleteBtn);
 
@@ -122,7 +182,7 @@ describe('BulkDelete', () => {
       );
    });
 
-   it('clearSelectedTracks and Off BulkDeleteMode if confirm window', () => {
+   it('clearSelectedTracks and Off BulkDeleteMode if confirm window', async () => {
       vi.spyOn(hooks, 'useAppSelector').mockImplementation((selector) => {
          if (selector === selectBulkDeleteMode) return true;
          if (selector === selectSelectedTrackIds)
@@ -132,9 +192,18 @@ describe('BulkDelete', () => {
       });
       vi.spyOn(window, 'confirm').mockReturnValue(true);
 
-      render(<BulkDelete />);
+      render(
+         <MockedProvider>
+            <MemoryRouter>
+               <BulkDelete />
+            </MemoryRouter>
+         </MockedProvider>
+      );
       const deleteBtn = screen.getByTestId('bulk-delete-button');
-      fireEvent.click(deleteBtn);
+      // eslint-disable-next-line @typescript-eslint/no-deprecated, @typescript-eslint/require-await
+      await act(async () => {
+         fireEvent.click(deleteBtn);
+      });
 
       // expect(dispatchMock).toHaveBeenCalledWith(
       //    deleteTracksBulk({ ids: defaultSelectedTrackIds })

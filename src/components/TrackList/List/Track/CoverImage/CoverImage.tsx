@@ -11,7 +11,6 @@ type CoverImageProps = {
 export default function CoverImage({ id }: CoverImageProps) {
    const track = useAppSelector((state) => selectTrackById(state, id));
    const imageUrl = track.coverImage;
-
    return (
       <img
          className={styles.cover}

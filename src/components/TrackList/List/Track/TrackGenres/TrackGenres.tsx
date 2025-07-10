@@ -12,8 +12,8 @@ export default function TrackGenres({ id }: TrackGenresProps) {
    const track = useAppSelector((state) => selectTrackById(state, id));
    return (
       <div className={styles.genres}>
-         {track.genres.map((genre, i) => (
-            <Genre key={i} genre={genre} />
+         {track.genres.map((genre) => (
+            <Genre key={genre} genre={genre} />
          ))}
       </div>
    );
