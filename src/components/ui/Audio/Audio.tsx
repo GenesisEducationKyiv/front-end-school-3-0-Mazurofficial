@@ -136,6 +136,7 @@ export default function Audio({ id }: AudioProps) {
                      onClick={togglePlay}
                      className={styles.playButton}
                      data-testid={`pause-button-${id}`}
+                     aria-label="pause button"
                   >
                      <i className="fa-solid fa-pause" />
                   </Button>
@@ -144,6 +145,7 @@ export default function Audio({ id }: AudioProps) {
                      onClick={togglePlay}
                      className={styles.playButton}
                      data-testid={`play-button-${id}`}
+                     aria-label="play button"
                   >
                      <i className="fa-solid fa-play" />
                   </Button>
