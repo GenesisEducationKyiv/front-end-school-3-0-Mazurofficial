@@ -1,0 +1,52 @@
+name: Playwright E2E Tests
+
+# on:
+#    push:
+#       branches: [main, hw-9-ci-cd]
+#    pull_request:
+#       branches: [main, hw-9-ci-cd]
+
+jobs:
+   e2e:
+      runs-on: ubuntu-latest
+      steps:
+         - name: Checkout code
+           uses: actions/checkout@v4
+
+         - name: Cache node_modules
+           uses: actions/cache@v4
+           with:
+              path: |
+                 **/node_modules
+              key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+              restore-keys: |
+                 ${{ runner.os }}-node-
+
+         - name: Set up Node.js
+           uses: actions/setup-node@v4
+           with:
+              node-version: 20
+
+         - name: Install dependencies
+           run: npm ci
+
+         - name: Build frontend
+           run: npm run build
+
+         - name: Install Playwright Browsers
+           run: npx playwright install --with-deps
+
+         - name: Start server
+           run: npx serve -s dist -l 3000 &
+
+         - name: Wait for server to be ready
+           run: npx wait-on http://localhost:3000
+
+         - name: Run Playwright E2E tests
+           run: npx playwright test src/tests/e2e
+
+         - name: Upload Playwright test results
+           uses: actions/upload-artifact@v4
+           with:
+              name: playwright-test-results
+              path: test-results/
