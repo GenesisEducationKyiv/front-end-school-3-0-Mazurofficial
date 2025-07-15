@@ -30,6 +30,7 @@ export default function PageLimitSelect() {
          setSearchParams((searchParams) =>
             updateSearchParam(searchParams, 'limit', newLimit.toString(), true)
          );
+         setLimitValue(newLimit);
       } else console.error('Inappropriate limit');
    };
 

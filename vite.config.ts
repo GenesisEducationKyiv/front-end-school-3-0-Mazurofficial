@@ -36,5 +36,18 @@ export default defineConfig({
 
    build: {
       sourcemap: true,
+      rollupOptions: {
+         output: {
+            manualChunks: {
+               'react-vendors': ['react', 'react-dom'],
+               'redux-vendors': ['@reduxjs/toolkit', 'react-redux'],
+               'react-router': ['react-router-dom'],
+               apollo: ['@apollo/client'],
+               graphql: ['graphql'],
+               zod: ['zod'],
+               'ts-belt': ['@mobily/ts-belt'],
+            },
+         },
+      },
    },
 });

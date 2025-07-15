@@ -11,6 +11,11 @@ type CoverImageProps = {
 export default function CoverImage({ id }: CoverImageProps) {
    const track = useAppSelector((state) => selectTrackById(state, id));
    const imageUrl = track.coverImage;
-   // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-   return <img className={styles.cover} src={imageUrl || fallbackImage} />;
+   return (
+      <img
+         className={styles.cover}
+         src={imageUrl ?? fallbackImage}
+         alt={track.slug}
+      />
+   );
 }
