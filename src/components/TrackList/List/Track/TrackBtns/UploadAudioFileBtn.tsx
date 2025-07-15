@@ -25,6 +25,7 @@ export default function UploadAudioFileBtn({ id }: UploadAudioFileBtnProps) {
          className={styles.iconButton}
          onClick={handleUploadAudio}
          title="Edit meta"
+         variant="icon-button"
       >
          <i className="fa-solid fa-upload"></i>
       </Button>

@@ -31,6 +31,7 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
          <Button
             disabled
             className={`${styles.iconButton} ${styles.deleteButton}`}
+            variant="icon-button"
          >
             <Spinner />
          </Button>
@@ -44,6 +45,7 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
          }}
          title="Delete track"
          data-testid={`delete-track-${id}`}
+         variant="icon-button"
       >
          <i className="fa-solid fa-trash"></i>
       </Button>

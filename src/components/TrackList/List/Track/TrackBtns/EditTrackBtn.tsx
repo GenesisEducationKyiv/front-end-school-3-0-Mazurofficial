@@ -26,6 +26,7 @@ export default function EditTrackBtn({ id }: EditTrackBtnProps) {
          onClick={handleEditTrack}
          title="Edit meta"
          data-testid={`edit-track-${id}`}
+         variant="icon-button"
       >
          <i className="fa-solid fa-pen"></i>
       </Button>
