@@ -1,6 +1,3 @@
-// For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
-import storybook from "eslint-plugin-storybook";
-
 import js from '@eslint/js';
 import vitestPlugin from '@vitest/eslint-plugin';
 import prettierConfig from 'eslint-config-prettier/flat';
@@ -26,6 +23,8 @@ const eslintConfig = config(
          'node_modules',
          'public/mockServiceWorker.js',
          'playwright.config.ts',
+         '.storybook',
+         'vitest.shims.d.ts',
       ],
    },
    {
