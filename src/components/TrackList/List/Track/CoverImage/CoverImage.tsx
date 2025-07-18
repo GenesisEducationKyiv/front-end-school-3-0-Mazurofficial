@@ -14,7 +14,8 @@ export default function CoverImage({ id }: CoverImageProps) {
    return (
       <img
          className={styles.cover}
-         src={imageUrl ?? fallbackImage}
+         // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+         src={imageUrl || fallbackImage}
          alt={track.slug}
       />
    );

@@ -23,6 +23,8 @@ const eslintConfig = config(
          'node_modules',
          'public/mockServiceWorker.js',
          'playwright.config.ts',
+         '.storybook',
+         'vitest.shims.d.ts',
       ],
    },
    {

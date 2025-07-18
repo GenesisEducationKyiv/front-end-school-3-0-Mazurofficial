@@ -43,7 +43,7 @@ export const GET_TRACKS = gql`
 
 export const CREATE_TRACK = gql`
    mutation AddTrack($input: CreateTrackInput!) {
-      addTrack(input: $input) {
+      createTrack(input: $input) {
          id
          title
          artist
