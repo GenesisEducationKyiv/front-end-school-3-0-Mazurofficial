@@ -4,8 +4,8 @@ import {
    setModalEdit,
 } from '@/features/modalWindow/modalWindowSlice';
 import type { TrackIdT } from '@/features/trackList/schema';
-import Button from '@/components/ui/Button/Button';
-import styles from './TrackBtns.module.scss';
+import EditIcon from '@mui/icons-material/Edit';
+import IconButtonCustom from '@/components/ui/Button/IconButton';
 
 type EditTrackBtnProps = {
    id: TrackIdT;
@@ -14,21 +14,18 @@ type EditTrackBtnProps = {
 export default function EditTrackBtn({ id }: EditTrackBtnProps) {
    const dispatch = useAppDispatch();
 
-   // Open modal window with editting track form
    const handleEditTrack = () => {
       dispatch(setModalEdit(id));
       dispatch(openModal());
    };
 
    return (
-      <Button
-         className={styles.iconButton}
+      <IconButtonCustom
+         ariaLabel="edit track"
          onClick={handleEditTrack}
-         title="Edit meta"
          data-testid={`edit-track-${id}`}
-         variant="icon-button"
       >
-         <i className="fa-solid fa-pen"></i>
-      </Button>
+         <EditIcon />
+      </IconButtonCustom>
    );
 }

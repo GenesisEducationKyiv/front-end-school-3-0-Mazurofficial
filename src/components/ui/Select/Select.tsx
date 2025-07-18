@@ -1,11 +1,16 @@
+import FormControl from '@mui/material/FormControl';
 import styles from './Select.module.scss';
+import InputLabel from '@mui/material/InputLabel';
+import type { SelectChangeEvent } from '@mui/material/Select';
+import Select from '@mui/material/Select';
+import MenuItem from '@mui/material/MenuItem';
 
 export type SelectOption = {
    label: string;
    value: string;
 };
 
-export type SelectProps = {
+export type SelectCustomProps = {
    label?: string;
    name: string;
    placeholder?: string;
@@ -16,49 +21,52 @@ export type SelectProps = {
    onChange: (value: string) => void;
 };
 
-export default function Select({
+const ITEM_HEIGHT = 52;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+   PaperProps: {
+      style: {
+         maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+         width: 250,
+      },
+   },
+};
+
+export default function SelectCustom({
    label,
    name,
-   placeholder = 'Select...',
-   className = '',
+   //placeholder = 'Select...',
+   //className = '',
    disabled = false,
    options,
    value,
    onChange,
-   ...rest
-}: SelectProps) {
-   const handleChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+}: SelectCustomProps) {
+   const handleChange = (e: SelectChangeEvent) => {
       onChange(e.target.value);
    };
 
    return (
-      <div className={`${styles.selectRow} ${className}`}>
-         {label && (
-            <label htmlFor={name} className={styles.label}>
-               {label}
-            </label>
-         )}
-         <select
+      <FormControl fullWidth className={styles.select}>
+         <InputLabel id={name}>{label}</InputLabel>
+         <Select
+            labelId="demo-simple-select-label"
             id={name}
-            name={name}
             value={value}
+            name={name}
             multiple={false}
             onChange={handleChange}
+            label={label}
             disabled={disabled}
-            className={styles.select}
-            {...rest}
+            size="medium"
+            MenuProps={MenuProps}
          >
-            {placeholder && (
-               <option value="" disabled hidden>
-                  {placeholder}
-               </option>
-            )}
             {options.map((opt) => (
-               <option key={opt.value} value={opt.value}>
+               <MenuItem key={opt.value} value={opt.value}>
                   {opt.label}
-               </option>
+               </MenuItem>
             ))}
-         </select>
-      </div>
+         </Select>
+      </FormControl>
    );
 }

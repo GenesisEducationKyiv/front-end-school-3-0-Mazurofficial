@@ -7,6 +7,9 @@ import { BrowserRouter } from 'react-router-dom';
 import { ApolloProvider } from '@apollo/client';
 import client from './apollo/client';
 const container = document.getElementById('root');
+import { ThemeProvider } from '@mui/material/styles';
+import CssBaseline from '@mui/material/CssBaseline';
+import theme from './styles/theme';
 
 if (container) {
    const root = createRoot(container);
@@ -15,7 +18,10 @@ if (container) {
       <ApolloProvider client={client}>
          <Provider store={store}>
             <BrowserRouter>
-               <App />
+               <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <App />
+               </ThemeProvider>
             </BrowserRouter>
          </Provider>
       </ApolloProvider>

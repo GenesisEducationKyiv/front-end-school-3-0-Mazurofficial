@@ -1,10 +1,9 @@
-import styles from './TrackBtns.module.scss';
 import { useAppDispatch } from '@/app/hooks';
 import type { TrackIdT } from '@/features/trackList/schema';
-import Button from '@/components/ui/Button/Button';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { useDeleteTrack } from '@/apollo/mutations/deleteTrack';
 import { deleteExTrack } from '@/features/trackList/trackListSlice';
-import Spinner from '@/components/ui/Spinner/Spinner';
+import IconButtonCustom from '@/components/ui/Button/IconButton';
 
 type DeleteTrackBtnProps = {
    id: TrackIdT;
@@ -14,7 +13,6 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
    const dispatch = useAppDispatch();
    const { deleteTrack, loading } = useDeleteTrack();
 
-   // Delete track by id
    const handleDeleteTrack = async (id: string) => {
       if (window.confirm('Are you sure you want to delete this track?')) {
          const result = await deleteTrack(id);
@@ -26,28 +24,17 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
       }
    };
 
-   if (loading)
-      return (
-         <Button
-            disabled
-            className={`${styles.iconButton} ${styles.deleteButton}`}
-            variant="icon-button"
-         >
-            <Spinner />
-         </Button>
-      );
-
    return (
-      <Button
-         className={`${styles.iconButton} ${styles.deleteButton}`}
+      <IconButtonCustom
+         ariaLabel="delete track"
+         loading={loading}
+         data-testid={`delete-track-${id}`}
          onClick={() => {
             void handleDeleteTrack(id);
          }}
-         title="Delete track"
-         data-testid={`delete-track-${id}`}
-         variant="icon-button"
+         color="error"
       >
-         <i className="fa-solid fa-trash"></i>
-      </Button>
+         <DeleteIcon />
+      </IconButtonCustom>
    );
 }

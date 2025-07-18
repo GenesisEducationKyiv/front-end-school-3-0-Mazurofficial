@@ -5,11 +5,11 @@ import {
 } from '@/features/modalWindow/modalWindowSlice';
 import Button from '@/components/ui/Button/Button';
 import styles from './AddTrackBtn.module.scss';
+import AddIcon from '@mui/icons-material/Add';
 
 export default function AddTrackBtn() {
    const dispatch = useAppDispatch();
 
-   // open modalwindow with AddTrackForm
    const handleAddTrack = () => {
       dispatch(openModal());
       dispatch(setModalAdd());
@@ -20,8 +20,8 @@ export default function AddTrackBtn() {
          className={styles.button}
          onClick={handleAddTrack}
          data-testid="create-track-button"
+         startIcon={<AddIcon />}
       >
-         <i className="fa fa-plus" />
          <span className={styles.buttonText}> Add track</span>
       </Button>
    );

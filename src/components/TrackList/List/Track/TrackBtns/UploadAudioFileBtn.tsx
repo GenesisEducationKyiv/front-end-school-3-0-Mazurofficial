@@ -4,8 +4,8 @@ import {
    setModalUpload,
 } from '@/features/modalWindow/modalWindowSlice';
 import type { TrackIdT } from '@/features/trackList/schema';
-import Button from '@/components/ui/Button/Button';
-import styles from './TrackBtns.module.scss';
+import UploadIcon from '@mui/icons-material/Upload';
+import IconButtonCustom from '@/components/ui/Button/IconButton';
 
 type UploadAudioFileBtnProps = {
    id: TrackIdT;
@@ -21,13 +21,11 @@ export default function UploadAudioFileBtn({ id }: UploadAudioFileBtnProps) {
    };
 
    return (
-      <Button
-         className={styles.iconButton}
+      <IconButtonCustom
+         ariaLabel="upload track file"
          onClick={handleUploadAudio}
-         title="Edit meta"
-         variant="icon-button"
       >
-         <i className="fa-solid fa-upload"></i>
-      </Button>
+         <UploadIcon />
+      </IconButtonCustom>
    );
 }

@@ -7,18 +7,20 @@ import styles from './TrackControls.module.scss';
 
 export default function TrackControls() {
    return (
-      <div className={styles.trackControls}>
-         <div className={styles.leftPart}>
-            <Sorting />
-            <div className={styles.filterLimitContainer}>
-               <Filter />
-               <PageLimitSelect />
+      <>
+         <div className={styles.trackControls}>
+            <div className={styles.leftPart}>
+               <Sorting />
+               <div className={styles.filterLimitContainer}>
+                  <Filter />
+                  <PageLimitSelect />
+               </div>
+            </div>
+            <div className={styles.rightPart}>
+               <Search />
             </div>
          </div>
-         <div className={styles.rightPart}>
-            <Search />
-            <BulkDelete />
-         </div>
-      </div>
+         <BulkDelete />
+      </>
    );
 }

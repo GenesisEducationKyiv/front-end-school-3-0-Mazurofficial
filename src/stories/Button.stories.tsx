@@ -15,23 +15,16 @@ const meta: Meta<StoryProps> = {
 
 type Story = StoryObj<StoryProps>;
 
-export const Primary: Story = {
+export const Contained: Story = {
    args: {
-      variant: 'primary',
+      variant: 'contained',
    },
    render: (args) => <Button {...args}>Test button</Button>,
 };
 
-export const Secondary: Story = {
+export const Outlined: Story = {
    args: {
-      variant: 'secondary',
-   },
-   render: (args) => <Button {...args}>Test button</Button>,
-};
-
-export const IconButton: Story = {
-   args: {
-      variant: 'icon-button',
+      variant: 'outlined',
    },
    render: (args) => (
       <Button {...args}>
@@ -45,6 +38,13 @@ export const IconButton: Story = {
          ></div>
       </Button>
    ),
+};
+
+export const Loading: Story = {
+   args: {
+      loading: true,
+   },
+   render: (args) => <Button {...args}>Test button</Button>,
 };
 
 export default meta;
