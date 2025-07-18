@@ -27,7 +27,8 @@ export const WithError: Story = {
    args: {
       placeholder: 'Test input',
       label: 'Test input',
-      error: 'Testing error message',
+      error: true,
+      errorText: 'Testing error message',
    },
    render: (args) => <Input {...args} />,
 };
