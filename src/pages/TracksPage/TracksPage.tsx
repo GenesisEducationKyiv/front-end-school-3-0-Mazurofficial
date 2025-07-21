@@ -8,6 +8,7 @@ import {
    selectTrackToEdit,
 } from '@/features/modalWindow/modalWindowSelector';
 import Preloader from '@/components/ui/Preloader/Preloader';
+import { Helmet } from 'react-helmet-async';
 
 const AddTrackForm = React.lazy(
    () => import('@/components/AddTrackForm/AddTrackForm')
@@ -25,11 +26,16 @@ export default function TracksPage() {
 
    return (
       <>
+         <Helmet>
+            <title>Tracks - Tunee</title>
+            <meta
+               name="description"
+               content="Browse and manage your music tracks on Tunee."
+            />
+         </Helmet>
          <Header />
          <TrackList />
          <Modal>
-            {/* Using Suspense to enable code splitting and lazy loading of modal forms.
-            This ensures that AddTrackForm, EditTrackForm, and UploadAudioForm are loaded only when needed. */}
             <Suspense fallback={<Preloader />}>
                {modalWindowType === 'add' && <AddTrackForm />}
                {modalWindowType === 'edit' && (
