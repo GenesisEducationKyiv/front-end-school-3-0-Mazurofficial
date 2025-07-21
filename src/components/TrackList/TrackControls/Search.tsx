@@ -55,6 +55,7 @@ export default function Search() {
          onChange={handleChange}
          className={styles.search}
          data-testid="search-input"
+         fullWidth
       />
    );
 }
