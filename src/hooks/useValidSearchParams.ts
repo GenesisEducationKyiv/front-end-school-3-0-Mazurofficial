@@ -5,6 +5,8 @@ import {
    getCleanStringFromURL,
    getValidNumberFromURL,
 } from '@/utils/getUrlParamHelpers';
+import { useAppDispatch } from '@/app/hooks';
+import { setQuery } from '@/features/query/querySlice';
 
 const sortOptions = ['title', 'artist', 'album', 'createdAt'] as const;
 const orderOptions = ['asc', 'desc'] as const;
@@ -16,6 +18,7 @@ export function useValidSearchParams(): {
    params: Partial<TrackQueryT>;
    paramsUrl: URLSearchParams;
 } {
+   const dispatch = useAppDispatch();
    const { search } = useLocation();
    const params = new URLSearchParams(search);
 
@@ -71,6 +74,7 @@ export function useValidSearchParams(): {
          return searchParams;
       }
    );
-
+   console.log(result);
+   dispatch(setQuery({ ...result }));
    return { params: result, paramsUrl: url };
 }

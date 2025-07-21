@@ -6,6 +6,7 @@ export type InputProps = {
    error?: boolean;
    errorText?: string;
    variant?: 'filled' | 'outlined' | 'standard';
+   fullWidth?: boolean;
 } & React.InputHTMLAttributes<HTMLInputElement>;
 
 export default function InputCustom({
@@ -19,6 +20,7 @@ export default function InputCustom({
    onChange,
    errorText,
    variant = 'outlined',
+   fullWidth = false,
 }: InputProps) {
    return (
       <TextField
@@ -35,6 +37,7 @@ export default function InputCustom({
          error={error}
          helperText={errorText}
          size="medium"
+         fullWidth={fullWidth}
       />
    );
 }

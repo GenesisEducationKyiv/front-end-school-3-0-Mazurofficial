@@ -7,6 +7,7 @@ const initialState: TrackQueryT = {
    order: 'asc',
    search: undefined,
    genre: undefined,
+   limit: 10,
 };
 
 export const querySlice = createAppSlice({
@@ -15,24 +16,25 @@ export const querySlice = createAppSlice({
    reducers: (create) => ({
       setQuery: create.reducer(
          (state, action: PayloadAction<Partial<TrackQueryT>>) => {
-            state = {
-               ...state,
-               ...action.payload,
-            };
+            const { search, sort, order, genre, limit } = action.payload;
+            state.search = search;
+            state.order = order;
+            state.genre = genre;
+            state.sort = sort;
+            state.limit = limit;
          }
       ),
       setSorting: create.reducer(
          (state, action: PayloadAction<Partial<TrackQueryT>>) => {
-            state = {
-               ...state,
-               ...action.payload,
-            };
+            const { sort, order } = action.payload;
+            state.order = order;
+            state.sort = sort;
          }
       ),
       setFilter: create.reducer(
          (state, action: PayloadAction<Partial<TrackQueryT['genre']>>) => {
             state.genre = action.payload;
-            state.page = 1; // Reset page on new sort
+            state.page = 1;
          }
       ),
       setSearch: create.reducer(

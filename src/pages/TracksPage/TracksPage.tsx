@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useAppSelector } from '@/app/hooks';
 import { Modal } from '@/components/ui/Modal/Modal';
 import Header from '@/components/Header/Header';
@@ -23,13 +23,22 @@ export default function TracksPage() {
    const modalWindowType = useAppSelector(selectModalType);
    const trackToEditId = useAppSelector(selectTrackToEdit);
 
+   useEffect(() => {
+      document.title = 'Tracks - Tunee';
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+         metaDesc.setAttribute(
+            'content',
+            'Browse and manage your music tracks on Tunee.'
+         );
+      }
+   }, []);
+
    return (
       <>
          <Header />
          <TrackList />
          <Modal>
-            {/* Using Suspense to enable code splitting and lazy loading of modal forms.
-            This ensures that AddTrackForm, EditTrackForm, and UploadAudioForm are loaded only when needed. */}
             <Suspense fallback={<Preloader />}>
                {modalWindowType === 'add' && <AddTrackForm />}
                {modalWindowType === 'edit' && (
