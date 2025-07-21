@@ -166,6 +166,7 @@ export default function Audio({ id }: AudioProps) {
                      onChange={handleSeek}
                      className={styles.progressBar}
                      data-testid={`audio-progress-${id}`}
+                     aria-label="Audio progressbar"
                   />
                   <span className={styles.time}>{formatTime(duration)}</span>
                   <audio ref={audioRef} src={audioUrl} hidden />
