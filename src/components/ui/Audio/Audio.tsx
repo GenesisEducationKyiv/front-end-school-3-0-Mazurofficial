@@ -14,12 +14,14 @@ import {
    selectTrackProgress,
 } from '@/features/audio/audioSelectors';
 import { getAudioFile } from '@/api/api';
-import Button from '../Button/Button';
 import { useAppDispatch, useAppSelector } from '@/app/hooks';
 import type {
    TrackIdT,
    TrackListNormalizedT,
 } from '@/features/trackList/schema';
+import IconButtonCustom from '../Button/IconButton';
+import PauseIcon from '@mui/icons-material/Pause';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 export type AudioProps = {
    id: TrackIdT;
@@ -132,23 +134,23 @@ export default function Audio({ id }: AudioProps) {
          {track.audioFile ? (
             <div className={styles.audioContainer}>
                {isCurrentTrackPlaying ? (
-                  <Button
+                  <IconButtonCustom
                      onClick={togglePlay}
                      className={styles.playButton}
-                     data-testid={`pause-button-${id}`}
-                     aria-label="pause button"
+                     dataTestId={`pause-button-${id}`}
+                     ariaLabel="pause button"
                   >
-                     <i className="fa-solid fa-pause" />
-                  </Button>
+                     <PauseIcon />
+                  </IconButtonCustom>
                ) : (
-                  <Button
+                  <IconButtonCustom
                      onClick={togglePlay}
                      className={styles.playButton}
-                     data-testid={`play-button-${id}`}
-                     aria-label="play button"
+                     dataTestId={`play-button-${id}`}
+                     ariaLabel="play button"
                   >
-                     <i className="fa-solid fa-play" />
-                  </Button>
+                     <PlayArrowIcon />
+                  </IconButtonCustom>
                )}
                <div
                   className={styles.audioControls}

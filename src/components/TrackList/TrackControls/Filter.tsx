@@ -35,8 +35,6 @@ export default function Filter() {
       } else console.error("Genre doesn't exist");
    };
 
-   // Map genres to Option view
-
    const genreOptions = [
       { label: 'All', value: '' },
       ...genres.map((genre) => ({ label: genre, value: genre })),
@@ -51,7 +49,7 @@ export default function Filter() {
                value={selectedGenre ?? ''}
                onChange={handleGenreChange}
                options={genreOptions}
-               data-testid="filter-genre"
+               dataTestId="filter-genre"
             />
          </div>
       );

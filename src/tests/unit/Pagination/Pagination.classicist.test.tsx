@@ -3,6 +3,8 @@ import { renderWithProviders } from '@/utils/test-utils';
 import Pagination from '@/components/TrackList/Pagination/Pagination';
 import { MemoryRouter } from 'react-router-dom';
 import LocationDisplayHelper from '@/tests/helpers/LocationDisplayHelper';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/styles/theme';
 
 describe('Pagination (black-box)', () => {
    const setup = (page: number, totalPages: number) => {
@@ -25,10 +27,12 @@ describe('Pagination (black-box)', () => {
       };
 
       return renderWithProviders(
-         <MemoryRouter initialEntries={['?page=' + page.toString()]}>
-            <Pagination />
-            <LocationDisplayHelper />
-         </MemoryRouter>,
+         <ThemeProvider theme={theme}>
+            <MemoryRouter initialEntries={['?page=' + page.toString()]}>
+               <Pagination />
+               <LocationDisplayHelper />
+            </MemoryRouter>
+         </ThemeProvider>,
          {
             preloadedState: {
                tracks: {

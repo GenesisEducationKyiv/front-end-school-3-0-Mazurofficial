@@ -3,6 +3,8 @@ import * as hooks from '@/app/hooks';
 import { vi } from 'vitest';
 import type * as reactRouterDom from 'react-router-dom';
 import Pagination from '@/components/TrackList/Pagination/Pagination';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/styles/theme';
 
 const setSearchParamsMock = vi.fn();
 
@@ -26,7 +28,11 @@ describe('Pagination', () => {
          page: 1,
          totalPages: 10,
       });
-      render(<Pagination />);
+      render(
+         <ThemeProvider theme={theme}>
+            <Pagination />
+         </ThemeProvider>
+      );
       expect(screen.getByTestId('pagination')).toBeInTheDocument();
    });
 
@@ -35,7 +41,11 @@ describe('Pagination', () => {
          page: 1,
          totalPages: 5,
       });
-      render(<Pagination />);
+      render(
+         <ThemeProvider theme={theme}>
+            <Pagination />
+         </ThemeProvider>
+      );
       expect(screen.getByTestId('pagination-prev')).toBeDisabled();
       expect(screen.getByTestId('pagination-next')).not.toBeDisabled();
    });
@@ -45,7 +55,11 @@ describe('Pagination', () => {
          page: 5,
          totalPages: 5,
       });
-      render(<Pagination />);
+      render(
+         <ThemeProvider theme={theme}>
+            <Pagination />
+         </ThemeProvider>
+      );
       expect(screen.getByTestId('pagination-next')).toBeDisabled();
       expect(screen.getByTestId('pagination-prev')).not.toBeDisabled();
    });
@@ -55,7 +69,11 @@ describe('Pagination', () => {
          page: 2,
          totalPages: 5,
       });
-      render(<Pagination />);
+      render(
+         <ThemeProvider theme={theme}>
+            <Pagination />
+         </ThemeProvider>
+      );
       fireEvent.click(screen.getByTestId('pagination-next'));
 
       expect(setSearchParamsMock).toHaveBeenCalled();
@@ -71,7 +89,11 @@ describe('Pagination', () => {
          page: 3,
          totalPages: 5,
       });
-      render(<Pagination />);
+      render(
+         <ThemeProvider theme={theme}>
+            <Pagination />
+         </ThemeProvider>
+      );
       fireEvent.click(screen.getByTestId('pagination-prev'));
 
       expect(setSearchParamsMock).toHaveBeenCalled();
@@ -87,7 +109,11 @@ describe('Pagination', () => {
          page: 1,
          totalPages: 0,
       });
-      render(<Pagination />);
+      render(
+         <ThemeProvider theme={theme}>
+            <Pagination />
+         </ThemeProvider>
+      );
       expect(screen.queryByTestId('pagination')).not.toBeInTheDocument();
    });
 });

@@ -31,8 +31,8 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
    const genres = useAppSelector(selectAllGenres);
    const [formData, setFormData] = useState(initialState);
    const [errors, setErrors] = useState<Record<string, string>>({});
-   const { createTrack } = useCreateTrack();
-   const { updateTrack } = useUpdateTrack();
+   const createTrack = useCreateTrack();
+   const updateTrack = useUpdateTrack();
 
    // Form validation function
    const validate = () => {
@@ -76,7 +76,7 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
       e.preventDefault();
       if (!validate()) return;
       if (onSubmitAction === 'EDIT' && id) {
-         const result = await updateTrack({ id, ...formData });
+         const result = await updateTrack.updateTrack({ id, ...formData });
          if (result.isOk()) {
             dispatch(updateExTrack(result.value));
             dispatch(closeModal());
@@ -84,8 +84,8 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
             console.error(result.error);
          }
       } else {
-         const result = await createTrack(formData);
-         if (result.isOk()) {
+         const result = await createTrack.createTrack(formData);
+         if (result.isOk() && !createTrack.loading && !updateTrack.loading) {
             dispatch(addNewTrack(result.value));
             dispatch(closeModal());
          } else if (result.isErr()) {
@@ -107,7 +107,8 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
             onChange={handleChange('title')}
             name="title"
             placeholder="Track title"
-            error={errors.title}
+            error={errors.title ? true : false}
+            errorText={errors.title}
             data-testid="input-title"
          />
          <Input
@@ -117,7 +118,8 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
             onChange={handleChange('artist')}
             name="artist"
             placeholder="Artist name"
-            error={errors.artist}
+            error={errors.artist ? true : false}
+            errorText={errors.artist}
             data-testid="input-artist"
          />
          <Input
@@ -127,7 +129,8 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
             onChange={handleChange('album')}
             name="album"
             placeholder="Album title"
-            error={errors.album}
+            error={errors.album ? true : false}
+            errorText={errors.album}
             data-testid="input-album"
          />
          <GenreSelect
@@ -142,10 +145,19 @@ export default function Form({ id, initialState, onSubmitAction }: FormProps) {
             onChange={handleChange('coverImage')}
             name="coverImage"
             placeholder="https://..."
-            error={errors.coverImage}
+            error={errors.coverImage ? true : false}
+            errorText={errors.coverImage}
             data-testid="input-cover-image"
          />
-         <Button type="submit" data-testid="submit-button">
+         <Button
+            type="submit"
+            data-testid="submit-button"
+            loading={
+               onSubmitAction === 'ADD'
+                  ? createTrack.loading
+                  : updateTrack.loading
+            }
+         >
             Save
          </Button>
       </form>
