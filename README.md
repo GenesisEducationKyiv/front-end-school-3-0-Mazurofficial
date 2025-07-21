@@ -22,10 +22,13 @@ Designed with scalability and maintainability in mind, this project serves as a 
 | ---------------------------- | ------------------------------------------------- |
 | **React**                    | UI Library for building user interfaces           |
 | **Redux Toolkit**            | State management with simplified configuration    |
+| **Apollo Client (GraphQL)**  | Data fetching and caching with GraphQL            |
 | **TypeScript**               | Typed superset of JavaScript                      |
 | **Vite**                     | Next-gen frontend tooling for development & build |
 | **Vitest**                   | Lightning fast unit testing powered by Vite       |
 | **React Testing Library**    | Testing utilities for React components            |
+| **Storybook**                | Isolated UI component development & testing       |
+| **React Router**             | Declarative routing and URL state management      |
 | **rollup-plugin-visualizer** | Bundle analysis and visualization                 |
 
 ---
@@ -56,7 +59,7 @@ This project delivers a full-featured experience for managing music tracks, comb
 
 ### 🔄 API Integration & State Management
 
-- **CRUD operations** using `createAsyncThunk` (`POST`, `PUT`, `DELETE`, `GET`)
+- **Migrated from REST API and createAsyncThunk to GraphQL** using **Apollo Client** for all data operations
 - Centralized state management via **Redux Toolkit** store
 - **Server-side logic** for:
    - Filtering
@@ -64,6 +67,27 @@ This project delivers a full-featured experience for managing music tracks, comb
    - Order direction change
    - Page limit and pagination
    - Search queries
+
+---
+
+### 🧩 UI Component Development & Testing
+
+- **Storybook** is used to develop and test MUI-based UI components in isolation, ensuring robust and reusable design.
+- **Material UI (MUI)** components are integrated and tested for accessibility and consistency.
+- **Better UX with loading states**: GraphQL mutation `loading` state is connected to the MUI `<Button loading />` prop, providing responsive feedback during async actions.
+
+---
+
+### 🌐 Routing & URL State
+
+- **React Router** is used for client-side routing and managing URL parameters/props, enabling deep linking and stateful navigation.
+
+---
+
+### 🔒 Security & CI
+
+- **Security audit** of dependencies is performed and documented in [`docs/security/security-audit-of-dependencies.md`](docs/security/security-audit-of-dependencies.md).
+- **Continuous Integration (CI)** is set up to run tests and checks on every push, ensuring code quality and security.
 
 ---
 
@@ -112,6 +136,13 @@ Built with reusable and accessible custom components:
 - **Bulk Select Mode**:
    - Select multiple tracks at once
    - Enables bulk actions like mass deletion
+
+---
+
+## 🚀 Performance Optimization
+
+- The application is optimized for fast load times and efficient rendering.
+- Achieved **98 points** on PC and **85 points** on Mobile platforms in performance audits (Lighthouse).
 
 ---
 
