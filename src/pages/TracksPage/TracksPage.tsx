@@ -1,4 +1,4 @@
-import React, { Suspense } from 'react';
+import React, { Suspense, useEffect } from 'react';
 import { useAppSelector } from '@/app/hooks';
 import { Modal } from '@/components/ui/Modal/Modal';
 import Header from '@/components/Header/Header';
@@ -8,7 +8,6 @@ import {
    selectTrackToEdit,
 } from '@/features/modalWindow/modalWindowSelector';
 import Preloader from '@/components/ui/Preloader/Preloader';
-import { Helmet } from 'react-helmet-async';
 
 const AddTrackForm = React.lazy(
    () => import('@/components/AddTrackForm/AddTrackForm')
@@ -24,15 +23,19 @@ export default function TracksPage() {
    const modalWindowType = useAppSelector(selectModalType);
    const trackToEditId = useAppSelector(selectTrackToEdit);
 
+   useEffect(() => {
+      document.title = 'Tracks - Tunee';
+      const metaDesc = document.querySelector('meta[name="description"]');
+      if (metaDesc) {
+         metaDesc.setAttribute(
+            'content',
+            'Browse and manage your music tracks on Tunee.'
+         );
+      }
+   }, []);
+
    return (
       <>
-         <Helmet>
-            <title>Tracks - Tunee</title>
-            <meta
-               name="description"
-               content="Browse and manage your music tracks on Tunee."
-            />
-         </Helmet>
          <Header />
          <TrackList />
          <Modal>

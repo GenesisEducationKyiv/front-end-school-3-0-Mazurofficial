@@ -10,7 +10,6 @@ const container = document.getElementById('root');
 import { ThemeProvider } from '@mui/material/styles';
 import CssBaseline from '@mui/material/CssBaseline';
 import theme from './styles/theme';
-import { HelmetProvider } from 'react-helmet-async';
 
 if (container) {
    const root = createRoot(container);
@@ -19,12 +18,10 @@ if (container) {
       <ApolloProvider client={client}>
          <Provider store={store}>
             <BrowserRouter>
-               <HelmetProvider>
-                  <ThemeProvider theme={theme}>
-                     <CssBaseline />
-                     <App />
-                  </ThemeProvider>
-               </HelmetProvider>
+               <ThemeProvider theme={theme}>
+                  <CssBaseline />
+                  <App />
+               </ThemeProvider>
             </BrowserRouter>
          </Provider>
       </ApolloProvider>
