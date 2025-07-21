@@ -7,6 +7,8 @@ import {
    openModal,
    setModalAdd,
 } from '@/features/modalWindow/modalWindowSlice';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/styles/theme';
 
 const mockStore = configureStore([]);
 
@@ -16,7 +18,9 @@ test('dispatches openModal and setModalAdd actions on click', () => {
 
    render(
       <Provider store={store}>
-         <AddTrackBtn />
+         <ThemeProvider theme={theme}>
+            <AddTrackBtn />
+         </ThemeProvider>
       </Provider>
    );
 

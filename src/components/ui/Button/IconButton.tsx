@@ -14,6 +14,7 @@ type IconButtonProps = {
       | 'info'
       | 'success'
       | 'warning';
+   dataTestId?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function IconButtonCustom({
@@ -26,6 +27,7 @@ export default function IconButtonCustom({
    loading = false,
    size = 'small',
    color = 'primary',
+   dataTestId = '',
 }: IconButtonProps) {
    return (
       <IconButton
@@ -37,6 +39,7 @@ export default function IconButtonCustom({
          loading={loading}
          size={size}
          color={color}
+         data-testid={dataTestId}
       >
          {children}
       </IconButton>

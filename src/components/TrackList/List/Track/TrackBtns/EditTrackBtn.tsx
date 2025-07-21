@@ -23,7 +23,7 @@ export default function EditTrackBtn({ id }: EditTrackBtnProps) {
       <IconButtonCustom
          ariaLabel="edit track"
          onClick={handleEditTrack}
-         data-testid={`edit-track-${id}`}
+         dataTestId={`edit-track-${id}`}
       >
          <EditIcon />
       </IconButtonCustom>

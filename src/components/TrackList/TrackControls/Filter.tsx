@@ -49,7 +49,7 @@ export default function Filter() {
                value={selectedGenre ?? ''}
                onChange={handleGenreChange}
                options={genreOptions}
-               data-testid="filter-genre"
+               dataTestId="filter-genre"
             />
          </div>
       );

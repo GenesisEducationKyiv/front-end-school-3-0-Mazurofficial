@@ -56,14 +56,14 @@ export default function BulkDelete() {
       <div className={styles.buttonsContainer}>
          <Button
             onClick={handleToggle}
-            data-testid="select-mode-toggle"
+            dataTestId="select-mode-toggle"
             color={bulkDeleteMode ? 'error' : 'primary'}
             startIcon={bulkDeleteMode ? null : <DeleteIcon />}
          >
             {bulkDeleteMode ? 'Cancel' : <span>Bulk Delete</span>}
          </Button>
          {bulkDeleteMode && selectedTrackIds.length < limit && (
-            <Button onClick={handleSelectAll} data-testid="select-all">
+            <Button onClick={handleSelectAll} dataTestId="select-all">
                Select all
             </Button>
          )}
@@ -71,7 +71,7 @@ export default function BulkDelete() {
             <Button
                onClick={() => void handleBulkDelete()}
                className={styles.deleteSelected}
-               data-testid="bulk-delete-button"
+               dataTestId="bulk-delete-button"
                loading={loading}
                startIcon={<DeleteIcon />}
             >

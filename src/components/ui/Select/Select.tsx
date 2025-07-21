@@ -19,6 +19,7 @@ export type SelectCustomProps = {
    options: SelectOption[];
    value: string;
    onChange: (value: string) => void;
+   dataTestId?: string;
 };
 
 const ITEM_HEIGHT = 52;
@@ -41,6 +42,7 @@ export default function SelectCustom({
    options,
    value,
    onChange,
+   dataTestId,
 }: SelectCustomProps) {
    const handleChange = (e: SelectChangeEvent) => {
       onChange(e.target.value);
@@ -60,9 +62,10 @@ export default function SelectCustom({
             disabled={disabled}
             size="medium"
             MenuProps={MenuProps}
+            data-testid={dataTestId}
          >
             {options.map((opt) => (
-               <MenuItem key={opt.value} value={opt.value}>
+               <MenuItem key={opt.value} value={opt.value} role="option">
                   {opt.label}
                </MenuItem>
             ))}

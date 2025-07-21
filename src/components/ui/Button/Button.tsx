@@ -7,6 +7,7 @@ export type ButtonProps = {
    loading?: boolean;
    startIcon?: ReactNode;
    color?: 'primary' | 'secondary' | 'success' | 'error' | 'info' | 'warning';
+   dataTestId?: string;
 } & React.ButtonHTMLAttributes<HTMLButtonElement>;
 
 export default function ButtonCustom({
@@ -20,6 +21,7 @@ export default function ButtonCustom({
    loading = false,
    startIcon = null,
    color = 'primary',
+   dataTestId = '',
 }: ButtonProps) {
    return (
       <Button
@@ -33,6 +35,7 @@ export default function ButtonCustom({
          loadingPosition="start"
          startIcon={startIcon}
          color={color}
+         data-testid={dataTestId}
       >
          {children}
       </Button>

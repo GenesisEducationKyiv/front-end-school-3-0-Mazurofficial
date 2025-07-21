@@ -28,7 +28,7 @@ export default function DeleteTrackBtn({ id }: DeleteTrackBtnProps) {
       <IconButtonCustom
          ariaLabel="delete track"
          loading={loading}
-         data-testid={`delete-track-${id}`}
+         dataTestId={`delete-track-${id}`}
          onClick={() => {
             void handleDeleteTrack(id);
          }}

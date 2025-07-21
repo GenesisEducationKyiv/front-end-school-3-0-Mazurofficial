@@ -17,6 +17,8 @@ import { MockedProvider } from '@apollo/client/testing';
 import { MemoryRouter } from 'react-router-dom';
 import * as bulkDeleteModule from '@/apollo/mutations/bulkDeleteTracks';
 import { act } from 'react-dom/test-utils';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from '@/styles/theme';
 
 describe('BulkDelete', () => {
    const dispatchMock = vi.fn();
@@ -46,7 +48,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -58,7 +62,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -77,7 +83,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -94,7 +102,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -111,7 +121,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -131,7 +143,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -148,7 +162,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -170,7 +186,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );
@@ -195,7 +213,9 @@ describe('BulkDelete', () => {
       render(
          <MockedProvider>
             <MemoryRouter>
-               <BulkDelete />
+               <ThemeProvider theme={theme}>
+                  <BulkDelete />
+               </ThemeProvider>
             </MemoryRouter>
          </MockedProvider>
       );

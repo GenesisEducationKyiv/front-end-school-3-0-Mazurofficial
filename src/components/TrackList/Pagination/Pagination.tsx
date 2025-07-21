@@ -29,7 +29,7 @@ export default function Pagination() {
                      handlePageChange(page - 1);
                   }}
                   disabled={page === 1}
-                  data-testid="pagination-prev"
+                  dataTestId="pagination-prev"
                >
                   Previous
                </Button>
@@ -41,7 +41,7 @@ export default function Pagination() {
                      handlePageChange(page + 1);
                   }}
                   disabled={page === totalPages}
-                  data-testid="pagination-next"
+                  dataTestId="pagination-next"
                >
                   Next
                </Button>

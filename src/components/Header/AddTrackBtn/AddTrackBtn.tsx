@@ -19,7 +19,7 @@ export default function AddTrackBtn() {
       <Button
          className={styles.button}
          onClick={handleAddTrack}
-         data-testid="create-track-button"
+         dataTestId="create-track-button"
          startIcon={<AddIcon />}
       >
          <span className={styles.buttonText}> Add track</span>

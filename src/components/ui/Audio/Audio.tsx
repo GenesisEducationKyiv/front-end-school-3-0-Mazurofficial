@@ -137,7 +137,7 @@ export default function Audio({ id }: AudioProps) {
                   <IconButtonCustom
                      onClick={togglePlay}
                      className={styles.playButton}
-                     data-testid={`pause-button-${id}`}
+                     dataTestId={`pause-button-${id}`}
                      ariaLabel="pause button"
                   >
                      <PauseIcon />
@@ -146,7 +146,7 @@ export default function Audio({ id }: AudioProps) {
                   <IconButtonCustom
                      onClick={togglePlay}
                      className={styles.playButton}
-                     data-testid={`play-button-${id}`}
+                     dataTestId={`play-button-${id}`}
                      ariaLabel="play button"
                   >
                      <PlayArrowIcon />
