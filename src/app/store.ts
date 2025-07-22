@@ -3,8 +3,6 @@ import type { Action, ThunkAction } from '@reduxjs/toolkit';
 import { combineSlices, configureStore } from '@reduxjs/toolkit';
 import { setupListeners } from '@reduxjs/toolkit/query';
 import { trackListSlice } from '@/features/trackList/trackListSlice';
-import axios from 'axios';
-import * as api from '@/api/api';
 import { modalWindowSlice } from '@/features/modalWindow/modalWindowSlice';
 import { genresSlice } from '@/features/genres/genresSlice';
 import { audioSlice } from '@/features/audio/audioSlice';
@@ -26,18 +24,6 @@ export type RootState = ReturnType<typeof rootReducer>;
 export const makeStore = (preloadedState?: Partial<RootState>) => {
    const store = configureStore({
       reducer: rootReducer,
-      // Adding the api middleware enables caching, invalidation, polling,
-      // and other useful features of `rtk-query`.
-      middleware: (getDefaultMiddleware) =>
-         getDefaultMiddleware({
-            thunk: {
-               extraArgument: {
-                  client: axios,
-                  api,
-               },
-            },
-            serializableCheck: false,
-         }),
       preloadedState,
    });
    // configure listeners using the provided defaults
